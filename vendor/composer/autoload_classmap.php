@@ -83,6 +83,7 @@ return array(
     'App\\Mail\\EmailVerification' => $baseDir . '/app/Mail/EmailVerification.php',
     'App\\Mail\\TestMail' => $baseDir . '/app/Mail/TestMail.php',
     'App\\Models\\AuthPage' => $baseDir . '/app/Models/AuthPage.php',
+    'App\\Models\\Book' => $baseDir . '/app/Models/Book.php',
     'App\\Models\\BookAssign' => $baseDir . '/app/Models/BookAssign.php',
     'App\\Models\\Category' => $baseDir . '/app/Models/Category.php',
     'App\\Models\\Contact' => $baseDir . '/app/Models/Contact.php',

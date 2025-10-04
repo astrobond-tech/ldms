@@ -20,9 +20,9 @@ class BookAssignController extends Controller
         // if (!\Auth::user()->can('manage book assign')) {
         //     return redirect()->back()->with('error', __('Permission Denied!'));
         // }
-        $user = auth()->user();
-        return $user;
-        return $request;
+        // $user = auth()->user();
+        // return $user;
+        // return $request;
 
         $query = BookAssign::with(['book', 'user'])->where('parent_id', parentId());
 
@@ -34,11 +34,11 @@ class BookAssignController extends Controller
             $query->where('book_id', $request->book_id);
         }
 
-        $assignments = $query->orderBy('id', 'desc')->get();
-        $users = User::where('parent_id', parentId())->pluck('name', 'id');
+        $bookAssigns = $query->orderBy('id', 'desc')->get();
+        $users = User::where('parent_id', parentId())->selectRaw("CONCAT(first_name, ' ', last_name) as name, id")->pluck('name', 'id');
         $books = Book::where('parent_id', parentId())->pluck('title', 'id');
 
-        return view('book_assign.index', compact('assignments', 'users', 'books'));
+        return view('book_assign.index', compact('bookAssigns', 'users', 'books'));
     }
 
     /**
@@ -50,7 +50,7 @@ class BookAssignController extends Controller
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
 
-        $users = User::where('parent_id', parentId())->pluck('name', 'id');
+        $users = User::where('parent_id', parentId())->selectRaw("CONCAT(first_name, ' ', last_name) as name, id")->pluck('name', 'id');
         $books = Book::where('parent_id', parentId())->pluck('title', 'id');
 
         return view('book_assign.create', compact('users', 'books'));
@@ -123,7 +123,7 @@ class BookAssignController extends Controller
             return redirect()->back()->with('error', __('Book assignment not found!'));
         }
 
-        $users = User::where('parent_id', parentId())->pluck('name', 'id');
+        $users = User::where('parent_id', parentId())->selectRaw("CONCAT(first_name, ' ', last_name) as name, id")->pluck('name', 'id');
         $books = Book::where('parent_id', parentId())->pluck('title', 'id');
 
         return view('book_assign.edit', compact('assign', 'users', 'books'));
