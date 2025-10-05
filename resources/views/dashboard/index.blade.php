@@ -177,7 +177,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('document.index') }}"><p class="mb-1">{{ __('Total Pepar Cuting') }}</p>
+                            <a href="{{ route('paper-cutting.index') }}"><p class="mb-1">{{ __('Total Paper Cutting') }}</p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <h4 class="mb-0">{{ $result['totalReminder'] }}</h4>
                                 </div>
@@ -197,7 +197,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('document.my-document') }}"><p class="mb-1">{{ __('Today Pepar Cuting') }}</p>
+                            <a href="{{ route('paper-cutting.index') }}"><p class="mb-1">{{ __('Today Paper Cutting') }}</p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <h4 class="mb-0">{{ $result['todayReminder'] }}
                                     </h4>

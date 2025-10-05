@@ -40,13 +40,50 @@ class BookAssignController extends Controller
 
         return view('book_assign.index', compact('bookAssigns', 'users', 'books'));
     }
+	public function create()
+	{
+		$clients = \App\Models\User::pluck('name', 'id'); // or whatever your assign_to list is
+		return view('bookassign.create', compact('clients'));
+	}
+
+	public function store(Request $request)
+	{
+		$request->validate([
+			'assign_to' => 'required',
+			'name' => 'required|string|max:255',
+			'room_no' => 'nullable|string|max:255',
+			'rack_no' => 'nullable|string|max:255',
+			'shelf_no' => 'nullable|string|max:255',
+			'box_no' => 'nullable|string|max:255',
+			'document' => 'nullable|file',
+			'description' => 'nullable|string',
+		]);
+
+		$bookAssign = new \App\Models\BookAssign();
+		$bookAssign->assign_to = $request->assign_to;
+		$bookAssign->name = $request->name;
+		$bookAssign->room_no = $request->room_no;
+		$bookAssign->rack_no = $request->rack_no;
+		$bookAssign->shelf_no = $request->shelf_no;
+		$bookAssign->box_no = $request->box_no;
+		$bookAssign->description = $request->description;
+		$bookAssign->created_by = auth()->id();
+
+		if ($request->hasFile('document')) {
+			$bookAssign->document = $request->file('document')->store('bookassigns');
+		}
+
+		$bookAssign->save();
+
+		return redirect()->route('book-assign.index')->with('success', 'Book assigned successfully.');
+	}
 
     /**
      * Show the form for creating a new book assignment.
-     */
+    
     public function create()
     {
-        if (!\Auth::user()->can('create book assign')) {
+        if (\Auth::user()->can('create book assign')) {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
 
@@ -55,10 +92,10 @@ class BookAssignController extends Controller
 
         return view('book_assign.create', compact('users', 'books'));
     }
-
+ */
     /**
      * Store a newly created book assignment in storage.
-     */
+    
     public function store(Request $request)
     {
         if (!\Auth::user()->can('create book assign')) {
@@ -91,7 +128,7 @@ class BookAssignController extends Controller
 
         return redirect()->route('book-assign.index')->with('success', __('Book successfully assigned!'));
     }
-
+ */
     /**
      * Display the specified book assignment.
      */

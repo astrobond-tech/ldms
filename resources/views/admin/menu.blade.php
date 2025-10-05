@@ -125,7 +125,7 @@
                     @endif
                     @if (Gate::check('manage reminder'))
                         <li class="pc-item {{ Request::route()->getName() == 'reminder.index' ? 'active' : '' }}">
-                            <a href="{{ route('document.index') }}" class="pc-link">
+                            <a href="{{ route('book-assign.index') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="cpu"></i></span>
                                 <span class="pc-mtext">{{ __('Assign Books') }}</span>
                             </a>
@@ -133,7 +133,7 @@
                     @endif
                     @if (Gate::check('manage my reminder'))
                         <li class="pc-item {{ Request::route()->getName() == 'my-reminder' ? 'active' : '' }}">
-                            <a href="{{ route('document.my-document') }}" class="pc-link">
+                            <a href="{{ route('book-store.index') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="aperture"></i></span>
                                 <span class="pc-mtext">{{ __('Books Store') }}</span>
                             </a>
@@ -141,9 +141,9 @@
                     @endif
                     @if (Gate::check('manage document history') && !empty($subscription) && $subscription->enabled_document_history == 1)
                         <li class="pc-item {{ Request::route()->getName() == 'document.history' ? 'active' : '' }}">
-                            <a href="{{ route('document.index') }}" class="pc-link">
+                            <a href="{{ route('paper-cutting.index') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="wind"></i></span>
-                                <span class="pc-mtext">{{ __('All Pepar Cutting') }}</span>
+                                <span class="pc-mtext">{{ __('All Paper Cutting') }}</span>
                             </a>
                         </li>
                     @endif

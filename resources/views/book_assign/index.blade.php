@@ -22,41 +22,37 @@
                         <div class="col-12 col-md">
                             <h5>{{ __('Book Assign') }}</h5>
                         </div>
-
-                        @if (Gate::check('create book-assign'))
-                            <div class="col-12 col-md-auto">
-                                <form action="" method="get">
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <div>{{ Form::date('created_date', null, ['class' => 'form-control']) }}</div>
-                                        <div>
-                                            <button type="submit" class="btn btn-secondary">
-                                                <i class="ti ti-search align-text-bottom"></i>
-                                            </button>
-                                        </div>
-                                        <div>
-                                            <a href="{{ route('book-assign.index') }}" class="btn btn-secondary">
-                                                <i class="ti ti-refresh align-text-bottom"></i>
-                                            </a>
-                                        </div>
-                                        @if (Gate::check('archive book-assign'))
-                                            <div>
-                                                <a href="{{ route('book-assign.archive.list') }}" class="btn btn-secondary">
-                                                    <i class="ti ti-archive"></i>
-                                                </a>
-                                            </div>
-                                        @endif
-                                        <div>
-                                            <a class="btn btn-secondary customModal" href="#!" data-size="lg"
-                                               data-url="{{ route('book-assign.create') }}"
-                                               data-title="{{ __('Create Book Assign') }}">
-                                                <i class="ti ti-circle-plus align-text-bottom"></i>
-                                                {{ __('Create Book Assign') }}
-                                            </a>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        @endif
+							<div class="col-12 col-md-auto">
+								<form action="" method="get">
+									<div class="d-flex flex-wrap gap-2">
+										<div>{{ Form::date('created_date', null, ['class' => 'form-control']) }}</div>
+										<div>
+											<button type="submit" class="btn btn-secondary">
+												<i class="ti ti-search align-text-bottom"></i>
+											</button>
+										</div>
+										<div>
+											<a href="{{ route('book-assign.index') }}" class="btn btn-secondary">
+												<i class="ti ti-refresh align-text-bottom"></i>
+											</a>
+										</div>
+										<div>
+											<a href="{{ route('book-assign.archive.list') }}" class="btn btn-secondary">
+												<i class="ti ti-archive"></i>
+											</a>
+										</div>
+										<div>
+											<a class="btn btn-secondary customModal" href="#!"
+											   data-size="lg"
+											   data-url="{{ route('book-assign.create') }}"
+											   data-title="{{ __('Create Book Assign') }}">
+												<i class="ti ti-circle-plus align-text-bottom"></i>
+												{{ __('Create Book Assign') }}
+											</a>
+										</div>
+									</div>
+								</form>
+							</div>
                     </div>
                 </div>
 
