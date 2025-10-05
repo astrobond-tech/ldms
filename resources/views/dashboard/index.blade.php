@@ -137,7 +137,7 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
 							<a href="{{ route('book-assign.index') }}">
-								<p class="mb-1">{{ __('Total Books') }}</p>
+								<p class="mb-1">{{ __('Assign Books') }}</p>
 								<div class="d-flex align-items-center justify-content-between">
 									<h4 class="mb-0">{{ $result['totalBooks'] ?? 0 }}</h4>
 								</div>
@@ -157,7 +157,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('document.my-document') }}"><p class="mb-1">{{ __('Today Books') }}</p>
+                            <a href="{{ route('document.my-document') }}"><p class="mb-1">{{ __('Books Store') }}</p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <h4 class="mb-0">{{ $result['totalCategory'] }}</h4>
                                 </div>

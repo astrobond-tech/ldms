@@ -119,7 +119,7 @@
                             class="pc-item {{ Request::route()->getName() == 'document.my-document' ? 'active' : '' }}">
                             <a href="{{ route('document.my-document') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="file"></i></span>
-                                <span class="pc-mtext">{{ __('My Documents') }}</span>
+                                <span class="pc-mtext">{{ __('Today Documents') }}</span>
                             </a>
                         </li>
                     @endif
@@ -127,7 +127,7 @@
                         <li class="pc-item {{ Request::route()->getName() == 'reminder.index' ? 'active' : '' }}">
                             <a href="{{ route('document.index') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="cpu"></i></span>
-                                <span class="pc-mtext">{{ __('All Books') }}</span>
+                                <span class="pc-mtext">{{ __('Assign Books') }}</span>
                             </a>
                         </li>
                     @endif
@@ -135,7 +135,7 @@
                         <li class="pc-item {{ Request::route()->getName() == 'my-reminder' ? 'active' : '' }}">
                             <a href="{{ route('document.my-document') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="aperture"></i></span>
-                                <span class="pc-mtext">{{ __('My Books') }}</span>
+                                <span class="pc-mtext">{{ __('Books Store') }}</span>
                             </a>
                         </li>
                     @endif
@@ -147,7 +147,7 @@
                             </a>
                         </li>
                     @endif
-                    <!-- @if (Gate::check('manage contact'))
+                   @if (Gate::check('manage contact'))
                         <li class="pc-item {{ in_array($routeName, ['contact.index']) ? 'active' : '' }}">
                             <a href="{{ route('contact.index') }}" class="pc-link">
                                 <span class="pc-micon"><i class="ti ti-phone-call"></i></span>
@@ -155,6 +155,7 @@
                             </a>
                         </li>
                     @endif
+					 <!-- 
                     @if (Gate::check('manage note'))
                         <li class="pc-item {{ in_array($routeName, ['note.index']) ? 'active' : '' }} ">
                             <a href="{{ route('note.index') }}" class="pc-link">
@@ -166,12 +167,12 @@
                 @endif
 
 
-                <!-- @if (Gate::check('manage category') ||
+                @if (Gate::check('manage category') ||
                         Gate::check('manage sub category') ||
                         Gate::check('manage Stage') ||
                         Gate::check('manage tag') ||
                         Gate::check('manage notification'))
-                    <li class="pc-item pc-caption">
+                   <!--   <li class="pc-item pc-caption">
                         <label>{{ __('System Configuration') }}</label>
                         <i class="ti ti-chart-arcs"></i>
                     </li>
@@ -206,7 +207,7 @@
                                 <span class="pc-mtext">{{ __('Tags') }}</span>
                             </a>
                         </li>
-                    @endif 
+                    @endif -->
                     @if (Gate::check('manage notification'))
                         <li class="pc-item {{ in_array($routeName, ['notification.index']) ? 'active' : '' }} ">
                             <a href="{{ route('notification.index') }}" class="pc-link">
@@ -215,7 +216,7 @@
                             </a>
                         </li>
                     @endif
-                @endif -->
+                @endif 
 
 
                 @if (Gate::check('manage pricing packages') ||
