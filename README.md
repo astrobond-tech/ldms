@@ -62,3 +62,18 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+# Remove existing symlinks
+rm -rf public/upload
+rm -rf public/storage
+
+# Create the storage directory in public
+mkdir -p public/storage
+
+# Create symlink for upload inside public/storage
+ln -s ../../storage/upload public/storage/upload
+
+# Recreate the default Laravel storage link for other files
+php artisan storage:link

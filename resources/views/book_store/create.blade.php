@@ -1,5 +1,15 @@
 {{ Form::open(['route' => 'book-store.store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
 <div class="modal-body">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="row">
         <div class="form-group col-md-6">
             {{ Form::label('book_name', __('Book Name'), ['class' => 'form-label']) }}
@@ -7,6 +17,16 @@
         </div>
         <div class="form-group col-md-6">
             {{ Form::label('book_file', __('Book File'), ['class' => 'form-label']) }}
+            <!-- Availability Type -->
+            <div class="form-group col-md-12">
+                {{ Form::label('availability_type', __('Availability Type'), ['class' => 'form-label']) }}
+                {{ Form::select('availability_type', ['' => __('-- Select --'), 'offline' => __('Offline Only'), 'online' => __('Online Only'), 'both' => __('Both (Offline & Online)')], old('availability_type'), ['class' => 'form-control', 'id' => 'availabilityType', 'required']) }}
+                <small class="form-text text-muted d-block mt-2">
+                    <strong>Offline:</strong> Book in physical location (Room, Rack, Shelf, Box)<br>
+                    <strong>Online:</strong> PDF file only<br>
+                    <strong>Both:</strong> Physical location + PDF file
+                </small>
+            </div>
             {{ Form::file('book_file', ['class' => 'form-control']) }}
         </div>
         <div class="form-group col-md-3">

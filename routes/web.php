@@ -379,8 +379,8 @@ Route::group(
         // Resource CRUD (index, create, store, show, edit, update, destroy)
         Route::resource('book-assign', BookAssignController::class);
         //Route::resource('book-assign', BookAssignController::class)->middleware(['auth','XSS']);
-		Route::get('book-assign/create', [BookAssignController::class, 'create'])->name('book-assign.create');
-		Route::post('book-assign', [BookAssignController::class, 'store'])->name('book-assign.store');
+        Route::get('book-assign/create', [BookAssignController::class, 'create'])->name('book-assign.create');
+        Route::post('book-assign', [BookAssignController::class, 'store'])->name('book-assign.store');
 
         // Extra custom routes
         Route::get('my-book-assign', [BookAssignController::class, 'myBookAssign'])->name('book-assign.my');
@@ -423,13 +423,16 @@ Route::group(
     ],
     function () {
         // Resource CRUD (index, create, store, show, edit, update, destroy)
-		Route::resource('book-store', BookStoreController::class);
-		Route::get('book-store/create', [BookStoreController::class, 'create'])->name('book-store.create');
-		Route::get('book-store/{id}/edit', [BookStoreController::class, 'edit'])->name('book-store.edit');
+        Route::resource('book-store', BookStoreController::class);
+        Route::get('book-store/create', [BookStoreController::class, 'create'])->name('book-store.create');
+        Route::get('book-store/{id}/edit', [BookStoreController::class, 'edit'])->name('book-store.edit');
         // Extra custom routes
-		Route::get('book-store/{id}/share', [BookStoreController::class, 'share'])->name('book-store.share');
+        Route::get('book-store/{id}/share', [BookStoreController::class, 'share'])->name('book-store.share');
         Route::get('my-book-store', [BookStoreController::class, 'myBookAssign'])->name('book-store.my');
         Route::get('book-store-archive', [BookStoreController::class, 'archiveList'])->name('book-store.archive.list');
+        Route::get('book-store/{id}/view-file', [BookStoreController::class, 'viewFile'])->name('book-store.view-file');
+        Route::get('book-store/my', [BookStoreController::class, 'myBookStore'])->name('book-store.my');
+        Route::get('book-store/archive/list', [BookStoreController::class, 'archiveList'])->name('book-store.archive.list');
     }
 );
 //------------------------------- Paper Cutting -------------------------------------------

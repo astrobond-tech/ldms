@@ -19,51 +19,47 @@
         <div class="card table-card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5>{{ __('Book Store') }}</h5>
-				<div class="col-12 col-md-auto">
-					<form action="" method="get">
-							<div class="d-flex flex-wrap gap-2">
-							{{-- Date filter (optional) --}}
-							<div>{{ Form::date('created_date', null, ['class' => 'form-control']) }}</div>
+                <div class="col-12 col-md-auto">
+                    <form action="" method="get">
+                        <div class="d-flex flex-wrap gap-2">
+                            {{-- Date filter (optional) --}}
+                            <div>{{ Form::date('created_date', null, ['class' => 'form-control']) }}</div>
 
-							{{-- Search button --}}
-							<div>
-								<button type="submit" class="btn btn-secondary">
-									<i class="ti ti-search align-text-bottom"></i>
-								</button>
-							</div>
+                            {{-- Search button --}}
+                            <div>
+                                <button type="submit" class="btn btn-secondary">
+                                    <i class="ti ti-search align-text-bottom"></i>
+                                </button>
+                            </div>
 
-							{{-- Refresh button --}}
-							<div>
-								<a href="{{ route('book-store.index') }}" class="btn btn-secondary">
-									<i class="ti ti-refresh align-text-bottom"></i>
-								</a>
-							</div>
-							<div>
-								<a href="{{ route('document.archive') }}" class="btn btn-secondary">
-								<i class="ti ti-archive"></i> </a>
-							</div>
-							{{-- Archive button (if user has permission) --}}
-							@if (Gate::check('archive book-store'))
-								<div>
-									<a href="{{ route('book-store.archive.list') }}" class="btn btn-secondary">
-										<i class="ti ti-archive"></i>
-									</a>
-								</div>
-							@endif
+                            {{-- Refresh button --}}
+                            <div>
+                                <a href="{{ route('book-store.index') }}" class="btn btn-secondary">
+                                    <i class="ti ti-refresh align-text-bottom"></i>
+                                </a>
+                            </div>
 
-							{{-- Create button --}}
-						<div>
-							<a class="btn btn-secondary customModal" href="#!" data-size="lg"
-							   data-url="{{ route('book-store.create') }}"
-							   data-title="{{ __('Create Book') }}">
-								<i class="ti ti-circle-plus align-text-bottom"></i>
-								{{ __('Create Book') }}
-							</a>
-						</div>
-					</div>
-				</form>
-			</div>
+                            {{-- Archive button (if user has permission) --}}
+                            @if (Gate::check('archive book-store'))
+                                <div>
+                                    <a href="{{ route('book-store.archive.list') }}" class="btn btn-secondary">
+                                        <i class="ti ti-archive"></i>
+                                    </a>
+                                </div>
+                            @endif
 
+                            {{-- Create button --}}
+                            <div>
+                                <a class="btn btn-secondary customModal" href="#!" data-size="lg"
+                                   data-url="{{ route('book-store.create') }}"
+                                   data-title="{{ __('Create Book') }}">
+                                    <i class="ti ti-circle-plus align-text-bottom"></i>
+                                    {{ __('Create Book') }}
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <div class="card-body pt-0">
@@ -72,6 +68,8 @@
                         <thead>
                             <tr>
                                 <th>{{ __('Book Name') }}</th>
+                                <th>{{ __('Availability') }}</th>
+                                <th>{{ __('File') }}</th>
                                 <th>{{ __('Room No') }}</th>
                                 <th>{{ __('Rack No') }}</th>
                                 <th>{{ __('Shelf No') }}</th>
@@ -84,12 +82,37 @@
                         <tbody>
                             @foreach ($books as $book)
                             <tr>
-                                <td>{{ $book->book_name }}</td>
+                                <td>
+                                    <span title="{{ $book->description ?? '-' }}">
+                                        {{ Str::limit($book->book_name, 30) }}
+                                    </span>
+                                </td>
+                                <td>
+                                    @if($book->availability_type === 'offline')
+                                        <span class="badge badge-secondary">{{ __('Offline') }}</span>
+                                    @elseif($book->availability_type === 'online')
+                                        <span class="badge badge-info">{{ __('Online') }}</span>
+                                    @else
+                                        <span class="badge badge-primary">{{ __('Both') }}</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if(!empty($book->{'book-file'}))
+                                        <a href="{{ route('book-store.view-file', $book->id) }}"
+                                           class="btn btn-sm btn-danger"
+                                           target="_blank"
+                                           title="{{ __('View PDF') }}">
+                                            <i class="ti ti-file-pdf"></i> PDF
+                                        </a>
+                                    @else
+                                        <span class="badge badge-light">{{ __('No File') }}</span>
+                                    @endif
+                                </td>
                                 <td>{{ $book->room_no ?? '-' }}</td>
                                 <td>{{ $book->rack_no ?? '-' }}</td>
                                 <td>{{ $book->shelf_no ?? '-' }}</td>
                                 <td>{{ $book->box_no ?? '-' }}</td>
-                                <td>{{ optional($book->createdByUser)->name }}</td>
+                                <td>{{ optional($book->createdByUser)->name ?? optional($book->createdByUser)->first_name }}</td>
                                 <td>{{ $book->created_at->format('d M, Y') }}</td>
                                 <td class="text-right">
                                     <div class="cart-action d-flex justify-content-end gap-2">

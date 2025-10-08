@@ -1,0 +1,10 @@
+to dispay the image need to run the foowing command into project directory
+
+rm -rf public/upload
+rm -rf public/storage
+
+mkdir -p public/storage
+
+ln -s ../../storage/upload public/storage/upload
+
+php artisan storage:link
