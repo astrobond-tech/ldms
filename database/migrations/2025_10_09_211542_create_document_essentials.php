@@ -53,10 +53,6 @@ return new class extends Migration
             $table->unsignedBigInteger('latest_version_history_id')->nullable()->comment('FK to version_histories.id');
             $table->foreign('latest_version_history_id')->references('id')->on('version_histories')->onDelete('set null');
 
-            // Responsible person
-            $table->unsignedBigInteger('responsible_person_id')->nullable();
-            $table->foreign('responsible_person_id')->references('id')->on('users')->onDelete('set null');
-
 
             // Indexes
             $table->index(['document_type', 'newspaper_name']);
@@ -78,9 +74,7 @@ return new class extends Migration
             if (Schema::hasColumn('document_essentials', 'latest_version_history_id')) {
                 $table->dropForeign(['latest_version_history_id']);
             }
-            if (Schema::hasColumn('document_essentials', 'responsible_person_id')) {
-                $table->dropForeign(['responsible_person_id']);
-            }
+
             if (Schema::hasColumn('document_essentials', 'document_id')) {
                 $table->dropForeign(['document_id']);
             }

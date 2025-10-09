@@ -32,7 +32,6 @@ class DocumentEssential extends Model
         'ref_number',
         'file_number',
         'latest_version_history_id',
-        'responsible_person_id',
     ];
 
     public function document()
@@ -45,8 +44,5 @@ class DocumentEssential extends Model
         return $this->belongsTo(VersionHistory::class, 'latest_version_history_id');
     }
 
-    public function responsiblePerson()
-    {
-        return $this->belongsTo(User::class, 'responsible_person_id');
-    }
+
 }

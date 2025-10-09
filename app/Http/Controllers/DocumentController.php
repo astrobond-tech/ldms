@@ -15,6 +15,7 @@ use App\Models\SubCategory;
 use App\Models\Subscription;
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\DocumentEssential;
 use App\Models\VersionHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -73,6 +74,26 @@ class DocumentController extends Controller
                     'document' => 'nullable',
                     'stage_id' => 'nullable',
                     'assign_to' => 'nullable',
+                    'document_type' => 'required|in:book,document,paper_cutting',
+                    'copies_total' => 'nullable|integer',
+                    'copies_available' => 'nullable|integer',
+                    'rack' => 'nullable|string',
+                    'shelf' => 'nullable|string',
+                    'room' => 'nullable|string',
+                    'cabinet' => 'nullable|string',
+                    'author' => 'nullable|string',
+                    'publisher' => 'nullable|string',
+                    'isbn' => 'nullable|string',
+                    'language' => 'nullable|string',
+                    'published_year' => 'nullable|integer',
+                    'newspaper_name' => 'nullable|string',
+                    'clipping_date' => 'nullable|date',
+                    'headline' => 'nullable|string',
+                    'section' => 'nullable|string',
+                    'forwarded_to' => 'nullable|string',
+                    'doc_category' => 'nullable|string',
+                    'ref_number' => 'nullable|string',
+                    'file_number' => 'nullable|string',
                 ]
             );
             if ($validator->fails()) {
@@ -100,6 +121,30 @@ class DocumentController extends Controller
             $document->created_by = \Auth::user()->id;
             $document->parent_id = parentId();
             $document->save();
+
+            $essential = new DocumentEssential();
+            $essential->document_id = $document->id;
+            $essential->document_type = $request->document_type;
+            $essential->copies_total = $request->copies_total;
+            $essential->copies_available = $request->copies_available;
+            $essential->rack = $request->rack;
+            $essential->shelf = $request->shelf;
+            $essential->room = $request->room;
+            $essential->cabinet = $request->cabinet;
+            $essential->author = $request->author;
+            $essential->publisher = $request->publisher;
+            $essential->isbn = $request->isbn;
+            $essential->language = $request->language;
+            $essential->published_year = $request->published_year;
+            $essential->newspaper_name = $request->newspaper_name;
+            $essential->clipping_date = $request->clipping_date;
+            $essential->headline = $request->headline;
+            $essential->section = $request->section;
+            $essential->forwarded_to = $request->forwarded_to;
+            $essential->doc_category = $request->doc_category;
+            $essential->ref_number = $request->ref_number;
+            $essential->file_number = $request->file_number;
+            $essential->save();
 
             if ($request->hasFile('document')) {
                 $uploadResult = handleFileUpload($request->file('document'), 'upload/document');
@@ -131,7 +176,7 @@ class DocumentController extends Controller
     public function show($cid)
     {
         $id = Crypt::decrypt($cid);
-        $document = Document::find($id);
+        $document = Document::with('essential')->find($id);
         $latestVersion = VersionHistory::where('document_id', $id)->where('current_version', 1)->first();
         return view('document.show', compact('document', 'latestVersion'));
     }
@@ -140,7 +185,7 @@ class DocumentController extends Controller
     public function edit($id)
     {
         $id = decrypt($id);
-        $document = Document::find($id);
+        $document = Document::with('essential')->find($id);
 
         $category = Category::where('parent_id', parentId())->get()->pluck('title', 'id');
         $category->prepend(__('Select Category'), '');
@@ -161,10 +206,30 @@ class DocumentController extends Controller
                 $request->all(),
                 [
                     'name' => 'required',
-                    'category_id' => 'required',
-                    'sub_category_id' => 'required',
-                    'stage_id' => 'required',
-                    'assign_to' => 'required',
+                    'category_id' => 'nullable',
+                    'sub_category_id' => 'nullable',
+                    'stage_id' => 'nullable',
+                    'assign_to' => 'nullable',
+                    'document_type' => 'required|in:book,document,paper_cutting',
+                    'copies_total' => 'nullable|integer',
+                    'copies_available' => 'nullable|integer',
+                    'rack' => 'nullable|string',
+                    'shelf' => 'nullable|string',
+                    'room' => 'nullable|string',
+                    'cabinet' => 'nullable|string',
+                    'author' => 'nullable|string',
+                    'publisher' => 'nullable|string',
+                    'isbn' => 'nullable|string',
+                    'language' => 'nullable|string',
+                    'published_year' => 'nullable|integer',
+                    'newspaper_name' => 'nullable|string',
+                    'clipping_date' => 'nullable|date',
+                    'headline' => 'nullable|string',
+                    'section' => 'nullable|string',
+                    'forwarded_to' => 'nullable|string',
+                    'doc_category' => 'nullable|string',
+                    'ref_number' => 'nullable|string',
+                    'file_number' => 'nullable|string',
                 ]
             );
             if ($validator->fails()) {
@@ -182,6 +247,29 @@ class DocumentController extends Controller
             $document->description = $request->description;
             $document->tages = !empty($request->tages) ? implode(',', $request->tages) : '';
             $document->save();
+
+            $essential = DocumentEssential::firstOrNew(['document_id' => $document->id]);
+            $essential->document_type = $request->document_type;
+            $essential->copies_total = $request->copies_total;
+            $essential->copies_available = $request->copies_available;
+            $essential->rack = $request->rack;
+            $essential->shelf = $request->shelf;
+            $essential->room = $request->room;
+            $essential->cabinet = $request->cabinet;
+            $essential->author = $request->author;
+            $essential->publisher = $request->publisher;
+            $essential->isbn = $request->isbn;
+            $essential->language = $request->language;
+            $essential->published_year = $request->published_year;
+            $essential->newspaper_name = $request->newspaper_name;
+            $essential->clipping_date = $request->clipping_date;
+            $essential->headline = $request->headline;
+            $essential->section = $request->section;
+            $essential->forwarded_to = $request->forwarded_to;
+            $essential->doc_category = $request->doc_category;
+            $essential->ref_number = $request->ref_number;
+            $essential->file_number = $request->file_number;
+            $essential->save();
 
             $data['document_id'] = $document->id;
             $data['action'] = __('Document Update');

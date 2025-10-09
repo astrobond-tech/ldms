@@ -53,11 +53,12 @@ class Document extends Model
 
     public function tags()
     {
-        $docTag = !empty($this->tages) ? explode(',', $this->tages) : [];
-        $tags = [];
-        foreach ($docTag as $tag) {
-            $tags[] = Tag::find($tag);
-        }
-        return $tags;
+        $tagsIds = explode(',', $this->tages);
+        return Tag::whereIn('id', $tagsIds)->get();
+    }
+
+    public function essential()
+    {
+        return $this->hasOne(DocumentEssential::class);
     }
 }
