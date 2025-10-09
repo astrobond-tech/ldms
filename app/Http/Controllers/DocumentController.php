@@ -57,7 +57,7 @@ class DocumentController extends Controller
         $stage_id = Stage::where('parent_id', parentId())->get()->pluck('title', 'id');
         $client = User::where('parent_id', parentId())->where('type', 'client')->get()->mapWithKeys(function ($user) {
             return [$user->id => $user->first_name . ' ' . $user->last_name];
-        });
+        })->prepend(__('Select Client'), '');
         return view('document.create', compact('category', 'tages', 'client', 'stage_id'));
     }
 
@@ -194,7 +194,7 @@ class DocumentController extends Controller
         $stage_id = Stage::where('parent_id', parentId())->get()->pluck('title', 'id');
         $client = User::where('parent_id', parentId())->where('type', 'client')->get()->mapWithKeys(function ($user) {
             return [$user->id => $user->first_name . ' ' . $user->last_name];
-        });
+        })->prepend(__('Select Client'), '');
         return view('document.edit', compact('document', 'category', 'tages', 'stage_id', 'client'));
     }
 
