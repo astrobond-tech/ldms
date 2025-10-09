@@ -83,7 +83,7 @@ class Table
     {
         self::$styles ??= self::initStyles();
 
-        return self::$styles[$name] ?? throw new InvalidArgumentException(\sprintf('Style "%s" is not defined.', $name));
+        return self::$styles[$name] ?? throw new InvalidArgumentException(sprintf('Style "%s" is not defined.', $name));
     }
 
     /**
@@ -168,7 +168,7 @@ class Table
     public function setColumnMaxWidth(int $columnIndex, int $width): static
     {
         if (!$this->output->getFormatter() instanceof WrappableOutputFormatterInterface) {
-            throw new \LogicException(\sprintf('Setting a maximum column width is only supported when using a "%s" formatter, got "%s".', WrappableOutputFormatterInterface::class, get_debug_type($this->output->getFormatter())));
+            throw new \LogicException(sprintf('Setting a maximum column width is only supported when using a "%s" formatter, got "%s".', WrappableOutputFormatterInterface::class, get_debug_type($this->output->getFormatter())));
         }
 
         $this->columnMaxWidths[$columnIndex] = $width;
@@ -237,7 +237,7 @@ class Table
     public function appendRow(TableSeparator|array $row): static
     {
         if (!$this->output instanceof ConsoleSectionOutput) {
-            throw new RuntimeException(\sprintf('Output should be an instance of "%s" when calling "%s".', ConsoleSectionOutput::class, __METHOD__));
+            throw new RuntimeException(sprintf('Output should be an instance of "%s" when calling "%s".', ConsoleSectionOutput::class, __METHOD__));
         }
 
         if ($this->rendered) {
@@ -364,28 +364,14 @@ class Table
                 $maxRows = max(\count($headers), \count($row));
                 for ($i = 0; $i < $maxRows; ++$i) {
                     $cell = (string) ($row[$i] ?? '');
-
-                    $eol = str_contains($cell, "\r\n") ? "\r\n" : "\n";
-                    $parts = explode($eol, $cell);
-                    foreach ($parts as $idx => $part) {
-                        if ($headers && !$containsColspan) {
-                            if (0 === $idx) {
-                                $rows[] = [\sprintf(
-                                    '<comment>%s%s</>: %s',
-                                    str_repeat(' ', $maxHeaderLength - Helper::width(Helper::removeDecoration($formatter, $headers[$i] ?? ''))),
-                                    $headers[$i] ?? '',
-                                    $part
-                                )];
-                            } else {
-                                $rows[] = [\sprintf(
-                                    '%s  %s',
-                                    str_pad('', $maxHeaderLength, ' ', \STR_PAD_LEFT),
-                                    $part
-                                )];
-                            }
-                        } elseif ('' !== $cell) {
-                            $rows[] = [$part];
-                        }
+                    if ($headers && !$containsColspan) {
+                        $rows[] = [sprintf(
+                            '<comment>%s</>: %s',
+                            str_pad($headers[$i] ?? '', $maxHeaderLength, ' ', \STR_PAD_LEFT),
+                            $cell
+                        )];
+                    } elseif ('' !== $cell) {
+                        $rows[] = [$cell];
                     }
                 }
             }
@@ -425,7 +411,7 @@ class Table
 
                 if ($isHeader && !$isHeaderSeparatorRendered) {
                     $this->renderRowSeparator(
-                        self::SEPARATOR_TOP,
+                        $isHeader ? self::SEPARATOR_TOP : self::SEPARATOR_TOP_BOTTOM,
                         $hasTitle ? $this->headerTitle : null,
                         $hasTitle ? $this->style->getHeaderTitleFormat() : null
                     );
@@ -435,7 +421,7 @@ class Table
 
                 if ($isFirstRow) {
                     $this->renderRowSeparator(
-                        $horizontal ? self::SEPARATOR_TOP : self::SEPARATOR_TOP_BOTTOM,
+                        $isHeader ? self::SEPARATOR_TOP : self::SEPARATOR_TOP_BOTTOM,
                         $hasTitle ? $this->headerTitle : null,
                         $hasTitle ? $this->style->getHeaderTitleFormat() : null
                     );
@@ -468,7 +454,7 @@ class Table
      *
      *     +-----+-----------+-------+
      */
-    private function renderRowSeparator(int $type = self::SEPARATOR_MID, ?string $title = null, ?string $titleFormat = null): void
+    private function renderRowSeparator(int $type = self::SEPARATOR_MID, string $title = null, string $titleFormat = null): void
     {
         if (!$count = $this->numberOfColumns) {
             return;
@@ -497,12 +483,12 @@ class Table
         }
 
         if (null !== $title) {
-            $titleLength = Helper::width(Helper::removeDecoration($formatter = $this->output->getFormatter(), $formattedTitle = \sprintf($titleFormat, $title)));
+            $titleLength = Helper::width(Helper::removeDecoration($formatter = $this->output->getFormatter(), $formattedTitle = sprintf($titleFormat, $title)));
             $markupLength = Helper::width($markup);
             if ($titleLength > $limit = $markupLength - 4) {
                 $titleLength = $limit;
-                $formatLength = Helper::width(Helper::removeDecoration($formatter, \sprintf($titleFormat, '')));
-                $formattedTitle = \sprintf($titleFormat, Helper::substr($title, 0, $limit - $formatLength - 3).'...');
+                $formatLength = Helper::width(Helper::removeDecoration($formatter, sprintf($titleFormat, '')));
+                $formattedTitle = sprintf($titleFormat, Helper::substr($title, 0, $limit - $formatLength - 3).'...');
             }
 
             $titleStart = intdiv($markupLength - $titleLength, 2);
@@ -513,7 +499,7 @@ class Table
             }
         }
 
-        $this->output->writeln(\sprintf($this->style->getBorderFormat(), $markup));
+        $this->output->writeln(sprintf($this->style->getBorderFormat(), $markup));
     }
 
     /**
@@ -523,7 +509,7 @@ class Table
     {
         $borders = $this->style->getBorderChars();
 
-        return \sprintf($this->style->getBorderFormat(), self::BORDER_OUTSIDE === $type ? $borders[1] : $borders[3]);
+        return sprintf($this->style->getBorderFormat(), self::BORDER_OUTSIDE === $type ? $borders[1] : $borders[3]);
     }
 
     /**
@@ -533,7 +519,7 @@ class Table
      *
      *     | 9971-5-0210-0 | A Tale of Two Cities  | Charles Dickens  |
      */
-    private function renderRow(array $row, string $cellFormat, ?string $firstCellFormat = null): void
+    private function renderRow(array $row, string $cellFormat, string $firstCellFormat = null): void
     {
         $rowContent = $this->renderColumnSeparator(self::BORDER_OUTSIDE);
         $columns = $this->getRowColumns($row);
@@ -564,15 +550,18 @@ class Table
         }
 
         // str_pad won't work properly with multi-byte strings, we need to fix the padding
-        $width += \strlen($cell) - Helper::width($cell) - substr_count($cell, "\0");
+        if (false !== $encoding = mb_detect_encoding($cell, null, true)) {
+            $width += \strlen($cell) - mb_strwidth($cell, $encoding);
+        }
+
         $style = $this->getColumnStyle($column);
 
         if ($cell instanceof TableSeparator) {
-            return \sprintf($style->getBorderFormat(), str_repeat($style->getBorderChars()[2], $width));
+            return sprintf($style->getBorderFormat(), str_repeat($style->getBorderChars()[2], $width));
         }
 
         $width += Helper::length($cell) - Helper::length(Helper::removeDecoration($this->output->getFormatter(), $cell));
-        $content = \sprintf($style->getCellRowContentFormat(), $cell);
+        $content = sprintf($style->getCellRowContentFormat(), $cell);
 
         $padType = $style->getPadType();
         if ($cell instanceof TableCell && $cell->getStyle() instanceof TableCellStyle) {
@@ -597,7 +586,7 @@ class Table
             $padType = $cell->getStyle()->getPadByAlign();
         }
 
-        return \sprintf($cellFormat, str_pad($content, $width, $style->getPaddingChar(), $padType));
+        return sprintf($cellFormat, str_pad($content, $width, $style->getPaddingChar(), $padType));
     }
 
     /**
@@ -629,56 +618,15 @@ class Table
             foreach ($rows[$rowKey] as $column => $cell) {
                 $colspan = $cell instanceof TableCell ? $cell->getColspan() : 1;
 
-                $minWrappedWidth = 0;
-                $widthApplied = [];
-                $lengthColumnBorder = $this->getColumnSeparatorWidth() + Helper::width($this->style->getCellRowContentFormat()) - 2;
-                for ($i = $column; $i < ($column + $colspan); ++$i) {
-                    if (isset($this->columnMaxWidths[$i])) {
-                        $minWrappedWidth += $this->columnMaxWidths[$i];
-                        $widthApplied[] = ['type' => 'max', 'column' => $i];
-                    } elseif (($this->columnWidths[$i] ?? 0) > 0 && $colspan > 1) {
-                        $minWrappedWidth += $this->columnWidths[$i];
-                        $widthApplied[] = ['type' => 'min', 'column' => $i];
-                    }
-                }
-                if (1 === \count($widthApplied)) {
-                    if ($colspan > 1) {
-                        $minWrappedWidth *= $colspan;  // previous logic
-                    }
-                } elseif (\count($widthApplied) > 1) {
-                    $minWrappedWidth += (\count($widthApplied) - 1) * $lengthColumnBorder;
-                }
-
-                $cellWidth = Helper::width(Helper::removeDecoration($formatter, $cell));
-                if ($minWrappedWidth && $cellWidth > $minWrappedWidth) {
-                    $cell = $formatter->formatAndWrap($cell, $minWrappedWidth);
-                }
-                // update minimal columnWidths for spanned columns
-                if ($colspan > 1 && $minWrappedWidth > 0) {
-                    $columnsMinWidthProcessed = [];
-                    $cellWidth = min($cellWidth, $minWrappedWidth);
-                    foreach ($widthApplied as $item) {
-                        if ('max' === $item['type'] && $cellWidth >= $this->columnMaxWidths[$item['column']]) {
-                            $minWidthColumn = $this->columnMaxWidths[$item['column']];
-                            $this->columnWidths[$item['column']] = $minWidthColumn;
-                            $columnsMinWidthProcessed[$item['column']] = true;
-                            $cellWidth -= $minWidthColumn + $lengthColumnBorder;
-                        }
-                    }
-                    for ($i = $column; $i < ($column + $colspan); ++$i) {
-                        if (isset($columnsMinWidthProcessed[$i])) {
-                            continue;
-                        }
-                        $this->columnWidths[$i] = $cellWidth + $lengthColumnBorder;
-                    }
+                if (isset($this->columnMaxWidths[$column]) && Helper::width(Helper::removeDecoration($formatter, $cell)) > $this->columnMaxWidths[$column]) {
+                    $cell = $formatter->formatAndWrap($cell, $this->columnMaxWidths[$column] * $colspan);
                 }
                 if (!str_contains($cell ?? '', "\n")) {
                     continue;
                 }
-                $eol = str_contains($cell ?? '', "\r\n") ? "\r\n" : "\n";
-                $escaped = implode($eol, array_map(OutputFormatter::escapeTrailingBackslash(...), explode($eol, $cell)));
+                $escaped = implode("\n", array_map(OutputFormatter::escapeTrailingBackslash(...), explode("\n", $cell)));
                 $cell = $cell instanceof TableCell ? new TableCell($escaped, ['colspan' => $cell->getColspan()]) : $escaped;
-                $lines = explode($eol, str_replace($eol, '<fg=default;bg=default></>'.$eol, $cell));
+                $lines = explode("\n", str_replace("\n", "<fg=default;bg=default></>\n", $cell));
                 foreach ($lines as $lineKey => $line) {
                     if ($colspan > 1) {
                         $line = new TableCell($line, ['colspan' => $colspan]);
@@ -734,15 +682,14 @@ class Table
         $unmergedRows = [];
         foreach ($rows[$line] as $column => $cell) {
             if (null !== $cell && !$cell instanceof TableCell && !\is_scalar($cell) && !$cell instanceof \Stringable) {
-                throw new InvalidArgumentException(\sprintf('A cell must be a TableCell, a scalar or an object implementing "__toString()", "%s" given.', get_debug_type($cell)));
+                throw new InvalidArgumentException(sprintf('A cell must be a TableCell, a scalar or an object implementing "__toString()", "%s" given.', get_debug_type($cell)));
             }
             if ($cell instanceof TableCell && $cell->getRowspan() > 1) {
                 $nbLines = $cell->getRowspan() - 1;
                 $lines = [$cell];
                 if (str_contains($cell, "\n")) {
-                    $eol = str_contains($cell, "\r\n") ? "\r\n" : "\n";
-                    $lines = explode($eol, str_replace($eol, '<fg=default;bg=default>'.$eol.'</>', $cell));
-                    $nbLines = \count($lines) > $nbLines ? substr_count($cell, $eol) : $nbLines;
+                    $lines = explode("\n", str_replace("\n", "<fg=default;bg=default>\n</>", $cell));
+                    $nbLines = \count($lines) > $nbLines ? substr_count($cell, "\n") : $nbLines;
 
                     $rows[$line][$column] = new TableCell($lines[0], ['colspan' => $cell->getColspan(), 'style' => $cell->getStyle()]);
                     unset($lines[0]);
@@ -879,7 +826,7 @@ class Table
 
     private function getColumnSeparatorWidth(): int
     {
-        return Helper::width(\sprintf($this->style->getBorderFormat(), $this->style->getBorderChars()[3]));
+        return Helper::width(sprintf($this->style->getBorderFormat(), $this->style->getBorderChars()[3]));
     }
 
     private function getCellWidth(array $row, int $column): int
@@ -962,6 +909,6 @@ class Table
             return $name;
         }
 
-        return self::$styles[$name] ?? throw new InvalidArgumentException(\sprintf('Style "%s" is not defined.', $name));
+        return self::$styles[$name] ?? throw new InvalidArgumentException(sprintf('Style "%s" is not defined.', $name));
     }
 }

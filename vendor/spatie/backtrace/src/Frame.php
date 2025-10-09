@@ -2,19 +2,10 @@
 
 namespace Spatie\Backtrace;
 
-use Spatie\Backtrace\CodeSnippets\CodeSnippet;
-use Spatie\Backtrace\CodeSnippets\FileSnippetProvider;
-use Spatie\Backtrace\CodeSnippets\LaravelSerializableClosureSnippetProvider;
-use Spatie\Backtrace\CodeSnippets\NullSnippetProvider;
-use Spatie\Backtrace\CodeSnippets\SnippetProvider;
-
 class Frame
 {
     /** @var string */
     public $file;
-
-    /** @var string|null */
-    public $trimmedFilePath;
 
     /** @var int */
     public $lineNumber;
@@ -31,26 +22,15 @@ class Frame
     /** @var string|null */
     public $class;
 
-    /** @var object|null */
-    public $object;
-
-    /** @var string|null */
-    protected $textSnippet;
-
     public function __construct(
         string $file,
         int $lineNumber,
         ?array $arguments,
-        ?string $method = null,
-        ?string $class = null,
-        ?object $object = null,
-        bool $isApplicationFrame = false,
-        ?string $textSnippet = null,
-        ?string $trimmedFilePath = null
+        string $method = null,
+        string $class = null,
+        bool $isApplicationFrame = false
     ) {
         $this->file = $file;
-
-        $this->trimmedFilePath = $trimmedFilePath;
 
         $this->lineNumber = $lineNumber;
 
@@ -60,11 +40,7 @@ class Frame
 
         $this->class = $class;
 
-        $this->object = $object;
-
         $this->applicationFrame = $isApplicationFrame;
-
-        $this->textSnippet = $textSnippet;
     }
 
     public function getSnippet(int $lineCount): array
@@ -72,7 +48,7 @@ class Frame
         return (new CodeSnippet())
             ->surroundingLine($this->lineNumber)
             ->snippetLineCount($lineCount)
-            ->get($this->getCodeSnippetProvider());
+            ->get($this->file);
     }
 
     public function getSnippetAsString(int $lineCount): string
@@ -80,7 +56,7 @@ class Frame
         return (new CodeSnippet())
             ->surroundingLine($this->lineNumber)
             ->snippetLineCount($lineCount)
-            ->getAsString($this->getCodeSnippetProvider());
+            ->getAsString($this->file);
     }
 
     public function getSnippetProperties(int $lineCount): array
@@ -93,18 +69,5 @@ class Frame
                 'text' => $snippet[$lineNumber],
             ];
         }, array_keys($snippet));
-    }
-
-    protected function getCodeSnippetProvider(): SnippetProvider
-    {
-        if ($this->textSnippet) {
-            return new LaravelSerializableClosureSnippetProvider($this->textSnippet);
-        }
-
-        if (@file_exists($this->file)) {
-            return new FileSnippetProvider($this->file);
-        }
-
-        return new NullSnippetProvider();
     }
 }

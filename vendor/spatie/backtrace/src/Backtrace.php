@@ -3,7 +3,6 @@
 namespace Spatie\Backtrace;
 
 use Closure;
-use Laravel\SerializableClosure\Support\ClosureStream;
 use Spatie\Backtrace\Arguments\ArgumentReducers;
 use Spatie\Backtrace\Arguments\ReduceArgumentsAction;
 use Spatie\Backtrace\Arguments\Reducers\ArgumentReducer;
@@ -22,9 +21,6 @@ class Backtrace
 
     /** @var bool */
     protected $withObject = false;
-
-    /** @var bool */
-    protected $trimFilePaths = false;
 
     /** @var string|null */
     protected $applicationPath;
@@ -80,9 +76,9 @@ class Backtrace
         return $this;
     }
 
-    public function withObject(bool $withObject = true): self
+    public function withObject(): self
     {
-        $this->withObject = $withObject;
+        $this->withObject = true;
 
         return $this;
     }
@@ -90,13 +86,6 @@ class Backtrace
     public function applicationPath(string $applicationPath): self
     {
         $this->applicationPath = rtrim($applicationPath, '/');
-
-        return $this;
-    }
-
-    public function trimFilePaths(): self
-    {
-        $this->trimFilePaths = true;
 
         return $this;
     }
@@ -149,16 +138,13 @@ class Backtrace
             return $this->throwable->getTrace();
         }
 
-        // Omit arguments and object
-        $options = DEBUG_BACKTRACE_IGNORE_ARGS;
+        $options = null;
 
-        // Populate arguments
-        if ($this->withArguments) {
-            $options = 0;
+        if (! $this->withArguments) {
+            $options = $options | DEBUG_BACKTRACE_IGNORE_ARGS;
         }
 
-        // Populate object
-        if ($this->withObject) {
+        if ($this->withObject()) {
             $options = $options | DEBUG_BACKTRACE_PROVIDE_OBJECT;
         }
 
@@ -185,33 +171,14 @@ class Backtrace
         $reduceArgumentsAction = new ReduceArgumentsAction($this->resolveArgumentReducers());
 
         foreach ($rawFrames as $rawFrame) {
-            $textSnippet = null;
-
-            if (
-                class_exists(ClosureStream::class)
-                && substr($currentFile, 0, strlen(ClosureStream::STREAM_PROTO)) === ClosureStream::STREAM_PROTO
-            ) {
-                $textSnippet = $currentFile;
-                $currentFile = ClosureStream::STREAM_PROTO.'://function()';
-                $currentLine -= 1;
-            }
-
-            if ($this->trimFilePaths && $this->applicationPath) {
-                $trimmedFilePath = str_replace($this->applicationPath, '', $currentFile);
-            }
-            $frame = new Frame(
+            $frames[] = new Frame(
                 $currentFile,
                 $currentLine,
                 $arguments,
                 $rawFrame['function'] ?? null,
                 $rawFrame['class'] ?? null,
-                $rawFrame['object'] ?? null,
-                $this->isApplicationFrame($currentFile),
-                $textSnippet,
-                $trimmedFilePath ?? null,
+                $this->isApplicationFrame($currentFile)
             );
-
-            $frames[] = $frame;
 
             $arguments = $this->withArguments
                 ? $rawFrame['args'] ?? null
@@ -233,10 +200,7 @@ class Backtrace
             $currentFile,
             $currentLine,
             [],
-            '[top]',
-            null,
-            null,
-            $this->isApplicationFrame($currentFile),
+            '[top]'
         );
 
         $frames = $this->removeBacktracePackageFrames($frames);
@@ -258,11 +222,6 @@ class Backtrace
         }
 
         if (strpos($relativeFile, DIRECTORY_SEPARATOR.'vendor') === 0) {
-            return false;
-        }
-
-        // Edge case for vendor files that typically live in the app code (e.g. Laravel's `artisan` or Statamic's `please`)
-        if (preg_match('/\/(artisan|please)$/', $relativeFile)) {
             return false;
         }
 

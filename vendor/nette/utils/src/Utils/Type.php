@@ -10,8 +10,6 @@ declare(strict_types=1);
 namespace Nette\Utils;
 
 use Nette;
-use function array_map, array_search, array_splice, count, explode, implode, is_a, is_string, strcasecmp, strtolower, substr, trim;
-use const PHP_VERSION_ID;
 
 
 /**
@@ -37,7 +35,7 @@ final class Type
 			? $reflection->getReturnType() ?? (PHP_VERSION_ID >= 80100 && $reflection instanceof \ReflectionMethod ? $reflection->getTentativeReturnType() : null)
 			: $reflection->getType();
 
-		return $type ? self::fromReflectionType($type, $reflection, asObject: true) : null;
+		return $type ? self::fromReflectionType($type, $reflection, true) : null;
 	}
 
 
@@ -51,7 +49,7 @@ final class Type
 
 		} elseif ($type instanceof \ReflectionUnionType || $type instanceof \ReflectionIntersectionType) {
 			return new self(
-				array_map(fn($t) => self::fromReflectionType($t, $of, asObject: false), $type->getTypes()),
+				array_map(fn($t) => self::fromReflectionType($t, $of, false), $type->getTypes()),
 				$type instanceof \ReflectionUnionType ? '|' : '&',
 			);
 
@@ -97,10 +95,8 @@ final class Type
 		$lower = strtolower($type);
 		if ($of instanceof \ReflectionFunction) {
 			return $type;
-		} elseif ($lower === 'self') {
+		} elseif ($lower === 'self' || $lower === 'static') {
 			return $of->getDeclaringClass()->name;
-		} elseif ($lower === 'static') {
-			return ($of instanceof ReflectionMethod ? $of->getOriginalClass() : $of->getDeclaringClass())->name;
 		} elseif ($lower === 'parent' && $of->getDeclaringClass()->getParentClass()) {
 			return $of->getDeclaringClass()->getParentClass()->name;
 		} else {
@@ -111,7 +107,7 @@ final class Type
 
 	private function __construct(array $types, string $kind = '|')
 	{
-		$o = array_search('null', $types, strict: true);
+		$o = array_search('null', $types, true);
 		if ($o !== false) { // null as last
 			array_splice($types, $o, 1);
 			$types[] = 'null';
@@ -262,8 +258,8 @@ final class Type
 				$subtypes,
 				fn($subtype) => Validators::isBuiltinType($type)
 					? strcasecmp($type, $subtype) === 0
-					: is_a($subtype, $type, allow_string: true),
-			),
+					: is_a($subtype, $type, true)
+			)
 		);
 	}
 }

@@ -58,7 +58,6 @@ class DocumentController extends Controller
             return [$user->id => $user->first_name . ' ' . $user->last_name];
         });
         return view('document.create', compact('category', 'tages', 'client', 'stage_id'));
-		
     }
 
 

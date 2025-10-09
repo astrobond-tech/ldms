@@ -62,9 +62,7 @@ class Sudo
     {
         $refl = new \ReflectionObject($object);
         $reflMethod = $refl->getMethod($method);
-        if (\PHP_VERSION_ID < 80100) {
-            $reflMethod->setAccessible(true);
-        }
+        $reflMethod->setAccessible(true);
 
         return $reflMethod->invokeArgs($object, $args);
     }
@@ -80,9 +78,7 @@ class Sudo
     public static function fetchStaticProperty($class, string $property)
     {
         $prop = self::getProperty(new \ReflectionClass($class), $property);
-        if (\PHP_VERSION_ID < 80100) {
-            $prop->setAccessible(true);
-        }
+        $prop->setAccessible(true);
 
         return $prop->getValue();
     }
@@ -99,13 +95,7 @@ class Sudo
     public static function assignStaticProperty($class, string $property, $value)
     {
         $prop = self::getProperty(new \ReflectionClass($class), $property);
-        $refl = $prop->getDeclaringClass();
-
-        if (\method_exists($refl, 'setStaticPropertyValue')) {
-            $refl->setStaticPropertyValue($property, $value);
-        } else {
-            $prop->setValue($value);
-        }
+        $prop->setValue($value);
 
         return $value;
     }
@@ -123,9 +113,7 @@ class Sudo
     {
         $refl = new \ReflectionClass($class);
         $reflMethod = $refl->getMethod($method);
-        if (\PHP_VERSION_ID < 80100) {
-            $reflMethod->setAccessible(true);
-        }
+        $reflMethod->setAccessible(true);
 
         return $reflMethod->invokeArgs(null, $args);
     }
@@ -141,11 +129,6 @@ class Sudo
     public static function fetchClassConst($class, string $const)
     {
         $refl = new \ReflectionClass($class);
-
-        // Special case the ::class magic constant, because `getConstant` does the wrong thing here.
-        if ($const === 'class') {
-            return $refl->getName();
-        }
 
         do {
             if ($refl->hasConstant($const)) {
@@ -170,9 +153,7 @@ class Sudo
         $instance = $refl->newInstanceWithoutConstructor();
 
         $constructor = $refl->getConstructor();
-        if (\PHP_VERSION_ID < 80100) {
-            $constructor->setAccessible(true);
-        }
+        $constructor->setAccessible(true);
         $constructor->invokeArgs($instance, $args);
 
         return $instance;
@@ -194,9 +175,7 @@ class Sudo
         do {
             try {
                 $prop = $refl->getProperty($property);
-                if (\PHP_VERSION_ID < 80100) {
-                    $prop->setAccessible(true);
-                }
+                $prop->setAccessible(true);
 
                 return $prop;
             } catch (\ReflectionException $e) {

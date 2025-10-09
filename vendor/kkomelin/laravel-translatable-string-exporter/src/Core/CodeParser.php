@@ -21,13 +21,6 @@ class CodeParser
     protected $basePattern = '/([FUNCTIONS])\(\s*([\'"])(?P<string>(?:(?![^\\\]\2).)+.)\2\s*[\),]/u';
 
     /**
-     * Named parameter search pattern for functions like trans_choice(key: 'string', ...).
-     *
-     * @var string
-     */
-    protected $namedParamPattern = '/([FUNCTIONS])\(\s*key:\s*([\'"])(?P<string>(?:(?![^\\\]\2).)+.)\2/u';
-
-    /**
      * Function-specific search patterns.
      *
      * @var array
@@ -45,7 +38,6 @@ class CodeParser
             'laravel-translatable-string-exporter.functions',
             [
                 '__',
-                'trans_choice',
                 '_t',
                 '@lang',
             ]
@@ -60,21 +52,12 @@ class CodeParser
                 $callable = $value;
             }
 
-            // Add base pattern.
             $pattern_key = str_replace('[FUNCTIONS]', $func, $this->basePattern);
             if (config('laravel-translatable-string-exporter.allow-newlines', false)) {
                 $pattern_key .= 's';
             }
-            $this->patterns[$pattern_key] = $callable;
 
-            // Add named parameter pattern for trans_choice and __ functions.
-            if (in_array($func, ['trans_choice', '__'])) {
-                $named_pattern = str_replace('[FUNCTIONS]', $func, $this->namedParamPattern);
-                if (config('laravel-translatable-string-exporter.allow-newlines', false)) {
-                    $named_pattern .= 's';
-                }
-                $this->patterns[$named_pattern] = $callable;
-            }
+            $this->patterns[$pattern_key] = $callable;
         }
     }
 

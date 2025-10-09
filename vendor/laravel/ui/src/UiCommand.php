@@ -4,9 +4,7 @@ namespace Laravel\Ui;
 
 use Illuminate\Console\Command;
 use InvalidArgumentException;
-use Symfony\Component\Console\Attribute\AsCommand;
 
-#[AsCommand(name: 'ui')]
 class UiCommand extends Command
 {
     /**

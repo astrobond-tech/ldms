@@ -220,7 +220,7 @@ class QuestionHelper extends Helper
         foreach ($choices as $key => $value) {
             $padding = str_repeat(' ', $maxWidth - self::width($key));
 
-            $messages[] = \sprintf("  [<$tag>%s$padding</$tag>] %s", $key, $value);
+            $messages[] = sprintf("  [<$tag>%s$padding</$tag>] %s", $key, $value);
         }
 
         return $messages;
@@ -317,7 +317,7 @@ class QuestionHelper extends Helper
                     $ofs += ('A' === $c[2]) ? -1 : 1;
                     $ofs = ($numMatches + $ofs) % $numMatches;
                 }
-            } elseif ('' === $c || \ord($c) < 32) {
+            } elseif (\ord($c) < 32) {
                 if ("\t" === $c || "\n" === $c) {
                     if ($numMatches > 0 && -1 !== $ofs) {
                         $ret = (string) $matches[$ofs];
@@ -501,7 +501,19 @@ class QuestionHelper extends Helper
             return self::$stdinIsInteractive;
         }
 
-        return self::$stdinIsInteractive = @stream_isatty(fopen('php://stdin', 'r'));
+        if (\function_exists('stream_isatty')) {
+            return self::$stdinIsInteractive = @stream_isatty(fopen('php://stdin', 'r'));
+        }
+
+        if (\function_exists('posix_isatty')) {
+            return self::$stdinIsInteractive = @posix_isatty(fopen('php://stdin', 'r'));
+        }
+
+        if (!\function_exists('shell_exec')) {
+            return self::$stdinIsInteractive = true;
+        }
+
+        return self::$stdinIsInteractive = (bool) shell_exec('stty 2> '.('\\' === \DIRECTORY_SEPARATOR ? 'NUL' : '/dev/null'));
     }
 
     /**
@@ -527,14 +539,10 @@ class QuestionHelper extends Helper
         $ret = '';
         $cp = $this->setIOCodepage();
         while (false !== ($char = fgetc($multiLineStreamReader))) {
-            if ("\x4" === $char || \PHP_EOL === "{$ret}{$char}") {
+            if (\PHP_EOL === "{$ret}{$char}") {
                 break;
             }
             $ret .= $char;
-        }
-
-        if (stream_get_meta_data($inputStream)['seekable']) {
-            fseek($inputStream, ftell($multiLineStreamReader));
         }
 
         return $this->resetIOCodepage($cp, $ret);

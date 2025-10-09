@@ -10,9 +10,6 @@ declare(strict_types=1);
 namespace Nette\Utils;
 
 use Nette;
-use Random\Randomizer;
-use function strlen;
-use const PHP_VERSION_ID;
 
 
 /**
@@ -40,8 +37,6 @@ final class Random
 			throw new Nette\InvalidArgumentException('Length must be greater than zero.');
 		} elseif ($chLen < 2) {
 			throw new Nette\InvalidArgumentException('Character list must contain at least two chars.');
-		} elseif (PHP_VERSION_ID >= 80300) {
-			return (new Randomizer)->getBytesFromString($charlist, $length);
 		}
 
 		$res = '';

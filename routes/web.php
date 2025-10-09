@@ -25,10 +25,7 @@ use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\StageController;
-use App\Http\Controllers\BookAssignController;
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\BookStoreController;
-use App\Http\Controllers\PaperCuttingController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -367,88 +364,8 @@ Route::group(
     }
 );
 
-//------------------------------- Book Assign -------------------------------------------
-Route::group(
-    [
-        'middleware' => [
-            'auth',
-            'XSS',
-        ],
-    ],
-    function () {
-        // Resource CRUD (index, create, store, show, edit, update, destroy)
-        Route::resource('book-assign', BookAssignController::class);
-        //Route::resource('book-assign', BookAssignController::class)->middleware(['auth','XSS']);
-        Route::get('book-assign/create', [BookAssignController::class, 'create'])->name('book-assign.create');
-        Route::post('book-assign', [BookAssignController::class, 'store'])->name('book-assign.store');
 
-        // Extra custom routes
-        Route::get('my-book-assign', [BookAssignController::class, 'myBookAssign'])->name('book-assign.my');
 
-        Route::get('book-assign/{id}/history', [BookAssignController::class, 'history'])->name('book-assign.history');
-        Route::get('book-assign/{id}/comment', [BookAssignController::class, 'comment'])->name('book-assign.comment');
-        Route::post('book-assign/{id}/comment', [BookAssignController::class, 'commentStore'])->name('book-assign.comment.store');
-
-        Route::get('book-assign/{id}/reminder', [BookAssignController::class, 'reminder'])->name('book-assign.reminder');
-        Route::get('book-assign/{id}/add-reminder', [BookAssignController::class, 'addReminder'])->name('book-assign.add.reminder');
-
-        Route::get('book-assign/{id}/share', [BookAssignController::class, 'share'])->name('book-assign.share');
-        Route::post('book-assign/{id}/share', [BookAssignController::class, 'shareStore'])->name('book-assign.share.store');
-        Route::delete('book-assign/{id}/share/destroy', [BookAssignController::class, 'shareDestroy'])->name('book-assign.share.destroy');
-
-        Route::get('book-assign/{id}/archive', [BookAssignController::class, 'archive'])->name('book-assign.archive');
-        Route::get('book-assign/{id}/unarchive', [BookAssignController::class, 'unarchive'])->name('book-assign.unarchive');
-        Route::get('book-assign-archive', [BookAssignController::class, 'archiveList'])->name('book-assign.archive.list');
-    }
-);
-
-//------------------------------- Book -------------------------------------------
-Route::group(['middleware' => ['auth']], function () {
-
-    // Book CRUD (index, create, store, show, edit, update, destroy)
-    Route::resource('book', BookController::class);
-
-    // Optional: Additional Book routes (if needed)
-    Route::get('book/{id}/archive', [BookController::class, 'archive'])->name('book.archive');
-    Route::get('book/{id}/unarchive', [BookController::class, 'unarchive'])->name('book.unarchive');
-    Route::get('book-archive', [BookController::class, 'archiveList'])->name('book.archive.list');
-});
-//------------------------------- Book Store -------------------------------------------
-Route::group(
-    [
-        'middleware' => [
-            'auth',
-            'XSS',
-        ],
-    ],
-    function () {
-        // Resource CRUD (index, create, store, show, edit, update, destroy)
-        Route::resource('book-store', BookStoreController::class);
-        Route::get('book-store/create', [BookStoreController::class, 'create'])->name('book-store.create');
-        Route::get('book-store/{id}/edit', [BookStoreController::class, 'edit'])->name('book-store.edit');
-        // Extra custom routes
-        Route::get('book-store/{id}/share', [BookStoreController::class, 'share'])->name('book-store.share');
-        Route::get('my-book-store', [BookStoreController::class, 'myBookAssign'])->name('book-store.my');
-        Route::get('book-store-archive', [BookStoreController::class, 'archiveList'])->name('book-store.archive.list');
-        Route::get('book-store/{id}/view-file', [BookStoreController::class, 'viewFile'])->name('book-store.view-file');
-        Route::get('book-store/my', [BookStoreController::class, 'myBookStore'])->name('book-store.my');
-        Route::get('book-store/archive/list', [BookStoreController::class, 'archiveList'])->name('book-store.archive.list');
-    }
-);
-//------------------------------- Paper Cutting -------------------------------------------
-Route::group(['middleware' => ['auth']], function () {
-
-    // Resource CRUD routes (index, create, store, show, edit, update, destroy)
-    Route::resource('paper-cutting', PaperCuttingController::class);
-
-    // Optional: If you want separate routes for modal handling (create/edit)
-    Route::get('paper-cutting/create', [PaperCuttingController::class, 'create'])->name('paper-cutting.create');
-    Route::get('paper-cutting/{id}/edit', [PaperCuttingController::class, 'edit'])->name('paper-cutting.edit');
-
-    // Extra custom routes if needed
-    Route::get('paper-cutting-archive', [PaperCuttingController::class, 'archiveList'])->name('paper-cutting.archive.list');
-    Route::get('my-paper-cutting', [PaperCuttingController::class, 'myPaperCutting'])->name('paper-cutting.my');
-});
 Route::get('page/{slug}', [PageController::class, 'page'])->name('page');
 //-------------------------------FAQ-------------------------------------------
 Route::impersonate();

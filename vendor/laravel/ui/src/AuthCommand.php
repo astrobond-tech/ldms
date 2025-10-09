@@ -4,9 +4,7 @@ namespace Laravel\Ui;
 
 use Illuminate\Console\Command;
 use InvalidArgumentException;
-use Symfony\Component\Console\Attribute\AsCommand;
 
-#[AsCommand(name: 'ui:auth')]
 class AuthCommand extends Command
 {
     /**
@@ -118,28 +116,11 @@ class AuthCommand extends Command
         $controller = app_path('Http/Controllers/HomeController.php');
 
         if (file_exists($controller) && ! $this->option('force')) {
-            if ($this->components->confirm("The [HomeController.php] file already exists. Do you want to replace it?", true)) {
-                file_put_contents($controller, $this->compileStub('controllers/HomeController'));
+            if ($this->components->confirm("The [HomeController.php] file already exists. Do you want to replace it?")) {
+                file_put_contents($controller, $this->compileControllerStub());
             }
         } else {
-            file_put_contents($controller, $this->compileStub('controllers/HomeController'));
-        }
-
-        $baseController = app_path('Http/Controllers/Controller.php');
-
-        if (file_exists($baseController) && ! $this->option('force')) {
-            if ($this->components->confirm("The [Controller.php] file already exists. Do you want to replace it?", true)) {
-                file_put_contents($baseController, $this->compileStub('controllers/Controller'));
-            }
-        } else {
-            file_put_contents($baseController, $this->compileStub('controllers/Controller'));
-        }
-
-        if (! file_exists(database_path('migrations/0001_01_01_000000_create_users_table.php'))) {
-            copy(
-                __DIR__.'/../stubs/migrations/2014_10_12_100000_create_password_resets_table.php',
-                base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php')
-            );
+            file_put_contents($controller, $this->compileControllerStub());
         }
 
         file_put_contents(
@@ -147,20 +128,24 @@ class AuthCommand extends Command
             file_get_contents(__DIR__.'/Auth/stubs/routes.stub'),
             FILE_APPEND
         );
+
+        copy(
+            __DIR__.'/../stubs/migrations/2014_10_12_100000_create_password_resets_table.php',
+            base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php')
+        );
     }
 
     /**
-     * Compiles the given stub.
+     * Compiles the "HomeController" stub.
      *
-     * @param  string  $stub
      * @return string
      */
-    protected function compileStub($stub)
+    protected function compileControllerStub()
     {
         return str_replace(
             '{{namespace}}',
             $this->laravel->getNamespace(),
-            file_get_contents(__DIR__.'/Auth/stubs/'.$stub.'.stub')
+            file_get_contents(__DIR__.'/Auth/stubs/controllers/HomeController.stub')
         );
     }
 

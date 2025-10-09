@@ -8,7 +8,7 @@ use Aws\Api\ApiProvider;
 use Aws\PresignUrlMiddleware;
 
 /**
- * Client used to interact with **Amazon EC2**.
+ * Client used to interact with Amazon EC2.
  *
  * @method \Aws\Result acceptVpcPeeringConnection(array $args = [])
  * @method \GuzzleHttp\Promise\Promise acceptVpcPeeringConnectionAsync(array $args = [])
@@ -530,8 +530,6 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise createFleetAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result createFpgaImage(array $args = []) (supported in versions 2016-11-15)
  * @method \GuzzleHttp\Promise\Promise createFpgaImageAsync(array $args = []) (supported in versions 2016-11-15)
- * @method \Aws\Result createImageUsageReport(array $args = []) (supported in versions 2016-11-15)
- * @method \GuzzleHttp\Promise\Promise createImageUsageReportAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result createInstanceConnectEndpoint(array $args = []) (supported in versions 2016-11-15)
  * @method \GuzzleHttp\Promise\Promise createInstanceConnectEndpointAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result createInstanceEventWindow(array $args = []) (supported in versions 2016-11-15)
@@ -650,8 +648,6 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise deleteFleetsAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result deleteFpgaImage(array $args = []) (supported in versions 2016-11-15)
  * @method \GuzzleHttp\Promise\Promise deleteFpgaImageAsync(array $args = []) (supported in versions 2016-11-15)
- * @method \Aws\Result deleteImageUsageReport(array $args = []) (supported in versions 2016-11-15)
- * @method \GuzzleHttp\Promise\Promise deleteImageUsageReportAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result deleteInstanceConnectEndpoint(array $args = []) (supported in versions 2016-11-15)
  * @method \GuzzleHttp\Promise\Promise deleteInstanceConnectEndpointAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result deleteInstanceEventWindow(array $args = []) (supported in versions 2016-11-15)
@@ -828,12 +824,6 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise describeFpgaImagesAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result describeIamInstanceProfileAssociations(array $args = []) (supported in versions 2016-11-15)
  * @method \GuzzleHttp\Promise\Promise describeIamInstanceProfileAssociationsAsync(array $args = []) (supported in versions 2016-11-15)
- * @method \Aws\Result describeImageReferences(array $args = []) (supported in versions 2016-11-15)
- * @method \GuzzleHttp\Promise\Promise describeImageReferencesAsync(array $args = []) (supported in versions 2016-11-15)
- * @method \Aws\Result describeImageUsageReportEntries(array $args = []) (supported in versions 2016-11-15)
- * @method \GuzzleHttp\Promise\Promise describeImageUsageReportEntriesAsync(array $args = []) (supported in versions 2016-11-15)
- * @method \Aws\Result describeImageUsageReports(array $args = []) (supported in versions 2016-11-15)
- * @method \GuzzleHttp\Promise\Promise describeImageUsageReportsAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result describeInstanceConnectEndpoints(array $args = []) (supported in versions 2016-11-15)
  * @method \GuzzleHttp\Promise\Promise describeInstanceConnectEndpointsAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result describeInstanceCreditSpecifications(array $args = []) (supported in versions 2016-11-15)
@@ -1216,8 +1206,6 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise modifyFpgaImageAttributeAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result modifyInstanceCapacityReservationAttributes(array $args = []) (supported in versions 2016-11-15)
  * @method \GuzzleHttp\Promise\Promise modifyInstanceCapacityReservationAttributesAsync(array $args = []) (supported in versions 2016-11-15)
- * @method \Aws\Result modifyInstanceConnectEndpoint(array $args = []) (supported in versions 2016-11-15)
- * @method \GuzzleHttp\Promise\Promise modifyInstanceConnectEndpointAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result modifyInstanceCpuOptions(array $args = []) (supported in versions 2016-11-15)
  * @method \GuzzleHttp\Promise\Promise modifyInstanceCpuOptionsAsync(array $args = []) (supported in versions 2016-11-15)
  * @method \Aws\Result modifyInstanceCreditSpecification(array $args = []) (supported in versions 2016-11-15)

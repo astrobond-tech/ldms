@@ -88,7 +88,7 @@
                 <div class="col-sm-12">
                     <div class="card border">
                         <div class="card-body">
-                            <iframe src="{{ Storage::url($Document->LastVersion->document) }}" width="100%" style="height:80vh"
+                            <iframe src="{{ Storage::url('upload/document/' . $Document->LastVersion->document) }}" width="100%" style="height:80vh"
                                 frameborder="0" id="docIframe"></iframe>
                         </div>
                     </div>

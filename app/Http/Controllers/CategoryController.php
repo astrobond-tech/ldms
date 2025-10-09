@@ -11,7 +11,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        if (Auth::user()->can('manage category')) {
+        if (\Auth::user()->can('manage category')) {
             $categories = Category::where('parent_id', '=', \Auth::user()->id)->OrderBy('id', 'desc')->get();
             return view('category.index', compact('categories'));
         } else {

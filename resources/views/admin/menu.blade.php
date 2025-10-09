@@ -119,35 +119,35 @@
                             class="pc-item {{ Request::route()->getName() == 'document.my-document' ? 'active' : '' }}">
                             <a href="{{ route('document.my-document') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="file"></i></span>
-                                <span class="pc-mtext">{{ __('Today Documents') }}</span>
+                                <span class="pc-mtext">{{ __('My Documents') }}</span>
                             </a>
                         </li>
                     @endif
                     @if (Gate::check('manage reminder'))
                         <li class="pc-item {{ Request::route()->getName() == 'reminder.index' ? 'active' : '' }}">
-                            <a href="{{ route('book-assign.index') }}" class="pc-link">
+                            <a href="{{ route('reminder.index') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="cpu"></i></span>
-                                <span class="pc-mtext">{{ __('Assign Books') }}</span>
+                                <span class="pc-mtext">{{ __('All Reminders') }}</span>
                             </a>
                         </li>
                     @endif
                     @if (Gate::check('manage my reminder'))
                         <li class="pc-item {{ Request::route()->getName() == 'my-reminder' ? 'active' : '' }}">
-                            <a href="{{ route('book-store.index') }}" class="pc-link">
+                            <a href="{{ route('my-reminder') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="aperture"></i></span>
-                                <span class="pc-mtext">{{ __('Books Store') }}</span>
+                                <span class="pc-mtext">{{ __('My Reminders') }}</span>
                             </a>
                         </li>
                     @endif
                     @if (Gate::check('manage document history') && !empty($subscription) && $subscription->enabled_document_history == 1)
                         <li class="pc-item {{ Request::route()->getName() == 'document.history' ? 'active' : '' }}">
-                            <a href="{{ route('paper-cutting.index') }}" class="pc-link">
+                            <a href="{{ route('document.history') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="wind"></i></span>
-                                <span class="pc-mtext">{{ __('All Paper Cutting') }}</span>
+                                <span class="pc-mtext">{{ __('Document History') }}</span>
                             </a>
                         </li>
                     @endif
-                   @if (Gate::check('manage contact'))
+                    @if (Gate::check('manage contact'))
                         <li class="pc-item {{ in_array($routeName, ['contact.index']) ? 'active' : '' }}">
                             <a href="{{ route('contact.index') }}" class="pc-link">
                                 <span class="pc-micon"><i class="ti ti-phone-call"></i></span>
@@ -155,7 +155,6 @@
                             </a>
                         </li>
                     @endif
-					 <!-- 
                     @if (Gate::check('manage note'))
                         <li class="pc-item {{ in_array($routeName, ['note.index']) ? 'active' : '' }} ">
                             <a href="{{ route('note.index') }}" class="pc-link">
@@ -163,7 +162,7 @@
                                 <span class="pc-mtext">{{ __('Notice Board') }}</span>
                             </a>
                         </li>
-                    @endif -->
+                    @endif
                 @endif
 
 
@@ -172,7 +171,7 @@
                         Gate::check('manage Stage') ||
                         Gate::check('manage tag') ||
                         Gate::check('manage notification'))
-                   <!--   <li class="pc-item pc-caption">
+                    <li class="pc-item pc-caption">
                         <label>{{ __('System Configuration') }}</label>
                         <i class="ti ti-chart-arcs"></i>
                     </li>
@@ -184,7 +183,7 @@
                             </a>
                         </li>
                     @endif
-                    @if (Gate::check('manage Pepar Cuting'))
+                    @if (Gate::check('manage category'))
                         <li class="pc-item {{ Request::route()->getName() == 'category.index' ? 'active' : '' }}">
                             <a href="{{ route('category.index') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="list"></i></span>
@@ -199,7 +198,7 @@
                                 <span class="pc-mtext">{{ __('Sub Category') }}</span>
                             </a>
                         </li>
-                    @endif 
+                    @endif
                     @if (Gate::check('manage tag'))
                         <li class="pc-item {{ Request::route()->getName() == 'tag.index' ? 'active' : '' }}">
                             <a href="{{ route('tag.index') }}" class="pc-link">
@@ -207,7 +206,7 @@
                                 <span class="pc-mtext">{{ __('Tags') }}</span>
                             </a>
                         </li>
-                    @endif -->
+                    @endif
                     @if (Gate::check('manage notification'))
                         <li class="pc-item {{ in_array($routeName, ['notification.index']) ? 'active' : '' }} ">
                             <a href="{{ route('notification.index') }}" class="pc-link">
@@ -216,7 +215,7 @@
                             </a>
                         </li>
                     @endif
-                @endif 
+                @endif
 
 
                 @if (Gate::check('manage pricing packages') ||
@@ -234,7 +233,7 @@
                         <i class="ti ti-chart-arcs"></i>
                     </li>
 
-                    <!-- @if (Gate::check('manage FAQ') || Gate::check('manage Page'))
+                    @if (Gate::check('manage FAQ') || Gate::check('manage Page'))
                         <li
                             class="pc-item pc-hasmenu {{ in_array($routeName, ['homepage.index', 'FAQ.index', 'pages.index', 'footerSetting']) ? 'active' : '' }}">
                             <a href="#!" class="pc-link">
@@ -280,8 +279,8 @@
                                 @endif
                             </ul>
                         </li>
-                    @endif -->
-                    <!-- @if (Auth::user()->type == 'super admin' || $pricing_feature_settings == 'on')
+                    @endif
+                    @if (Auth::user()->type == 'super admin' || $pricing_feature_settings == 'on')
                         @if (Gate::check('manage pricing packages') || Gate::check('manage pricing transation'))
                             <li
                                 class="pc-item pc-hasmenu {{ in_array($routeName, ['subscriptions.index', 'subscriptions.show', 'subscription.transaction']) ? 'active' : '' }}">
@@ -311,8 +310,8 @@
                                 </ul>
                             </li>
                         @endif
-                    @endif -->
-                    <!-- @if (Gate::check('manage coupon') || Gate::check('manage coupon history'))
+                    @endif
+                    @if (Gate::check('manage coupon') || Gate::check('manage coupon history'))
                         <li
                             class="pc-item pc-hasmenu {{ in_array($routeName, ['coupons.index', 'coupons.history']) ? 'active' : '' }}">
                             <a href="#!" class="pc-link">
@@ -339,7 +338,7 @@
                                 @endif
                             </ul>
                         </li>
-                    @endif -->
+                    @endif
                     @if (Gate::check('manage account settings') ||
                             Gate::check('manage password settings') ||
                             Gate::check('manage general settings') ||

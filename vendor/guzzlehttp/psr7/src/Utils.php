@@ -14,18 +14,18 @@ final class Utils
     /**
      * Remove the items given by the keys, case insensitively from the data.
      *
-     * @param (string|int)[] $keys
+     * @param string[] $keys
      */
     public static function caselessRemove(array $keys, array $data): array
     {
         $result = [];
 
         foreach ($keys as &$key) {
-            $key = strtolower((string) $key);
+            $key = strtolower($key);
         }
 
         foreach ($data as $k => $v) {
-            if (!in_array(strtolower((string) $k), $keys)) {
+            if (!is_string($k) || !in_array(strtolower($k), $keys)) {
                 $result[$k] = $v;
             }
         }
@@ -251,20 +251,6 @@ final class Utils
     }
 
     /**
-     * Redact the password in the user info part of a URI.
-     */
-    public static function redactUserInfo(UriInterface $uri): UriInterface
-    {
-        $userInfo = $uri->getUserInfo();
-
-        if (false !== ($pos = \strpos($userInfo, ':'))) {
-            return $uri->withUserInfo(\substr($userInfo, 0, $pos), '***');
-        }
-
-        return $uri;
-    }
-
-    /**
      * Create a new stream based on the input type.
      *
      * Options is an associative array that can contain the following keys:
@@ -397,7 +383,7 @@ final class Utils
         restore_error_handler();
 
         if ($ex) {
-            /** @var \RuntimeException $ex */
+            /** @var $ex \RuntimeException */
             throw $ex;
         }
 
@@ -444,7 +430,7 @@ final class Utils
         restore_error_handler();
 
         if ($ex) {
-            /** @var \RuntimeException $ex */
+            /** @var $ex \RuntimeException */
             throw $ex;
         }
 

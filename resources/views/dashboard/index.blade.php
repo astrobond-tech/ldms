@@ -95,12 +95,11 @@
                                 <i class="ti ti-users f-24"></i>
                             </div>
                         </div>
-                       <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('document.index') }}"><p class="mb-1">{{ __('Total Document') }}</p>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['totalDocument'] }}</h4>
-                                </div>
-                            </a>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-1">{{ __('Total Users') }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">{{ $result['totalUser'] }}</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -116,11 +115,10 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('document.my-document') }}"><p class="mb-1">{{ __('Today Document') }}</p>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['todayDocument'] }}</h4>
-                                </div>
-                            </a>
+                            <p class="mb-1">{{ __('Total Document') }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">{{ $result['totalDocument'] }}</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -136,13 +134,11 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-							<a href="{{ route('book-assign.index') }}">
-								<p class="mb-1">{{ __('Assign Books') }}</p>
-								<div class="d-flex align-items-center justify-content-between">
-									<h4 class="mb-0">{{ $result['totalBooks'] ?? 0 }}</h4>
-								</div>
-							</a>
-						</div>
+                            <p class="mb-1">{{ __('Today Document') }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">{{ $result['todayDocument'] }}</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -157,11 +153,10 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('document.my-document') }}"><p class="mb-1">{{ __('Books Store') }}</p>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['totalCategory'] }}</h4>
-                                </div>
-                            </a>
+                            <p class="mb-1">{{ __('Total Category') }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">{{ $result['totalCategory'] }}</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -177,11 +172,11 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('paper-cutting.index') }}"><p class="mb-1">{{ __('Total Paper Cutting') }}</p>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['totalReminder'] }}</h4>
-                                </div>
-                            </a>
+                            <p class="mb-1">{{ __('Total Reminder') }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">{{ $result['totalReminder'] }}
+                                </h4>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -197,12 +192,11 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('paper-cutting.index') }}"><p class="mb-1">{{ __('Today Paper Cutting') }}</p>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['todayReminder'] }}
-                                    </h4>
-                                </div>
-                            </a>
+                            <p class="mb-1">{{ __('Today Reminder') }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">{{ $result['todayReminder'] }}
+                                </h4>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -218,18 +212,18 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('users.index') }}"><p class="mb-1">{{ __('Total Users') }}</p>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['totalUser'] }}</h4>
-                                </div>
-                            </a>
+                            <p class="mb-1">{{ __('Total Contact') }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">{{ $result['totalContact'] }}
+                                </h4>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- <div class="col-lg-6 col-md-6">
+        <div class="col-lg-6 col-md-6">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-start justify-content-between">
@@ -240,9 +234,9 @@
                     <div id="pie_documentByCategory"></div>
                 </div>
             </div>
-        </div> -->
+        </div>
 
-        <!-- <div class="col-lg-6 col-md-6">
+        <div class="col-lg-6 col-md-6">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-start justify-content-between">
@@ -253,7 +247,7 @@
                     <div id="pie_documentBySubCategory"></div>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <div class="col-lg-12 col-md-12">
             <div class="card">

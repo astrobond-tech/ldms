@@ -9,39 +9,29 @@
             {{Form::label('name',__('Name'),array('class'=>'form-label'))}}
             {{Form::text('name',null,array('class'=>'form-control','placeholder'=>__('Enter document name')))}}
         </div>
-        <!--<div class="form-group col-md-6">
+        <div class="form-group col-md-6">
             {{Form::label('category_id',__('Category'),array('class'=>'form-label'))}}
             {{Form::select('category_id',$category,null,array('class'=>'form-control hidesearch','id'=>'category'))}}
         </div>
         <div class="form-group col-md-6">
-            {{Form::label('sub_category_id',__('Room No'),array('class'=>'form-label'))}}
+            {{Form::label('sub_category_id',__('Sub Category'),array('class'=>'form-label'))}}
             <div class="sc_div">
-               <select class="form-control hidesearch sub_category_id" id="sub_category_id" name="sub_category_id">
+                <select class="form-control hidesearch sub_category_id" id="sub_category_id" name="sub_category_id">
                     <option value="">{{__('Select Sub Category')}}</option>
                 </select>
-				{{Form::text('name',null,array('class'=>'form-control','placeholder'=>__('Enter Room No')))}}
             </div>
-        </div>-->
-       
-        <div class="form-group col-md-3">
-            {{Form::label('tages',__('Room No'),array('class'=>'form-label'))}}
-            {{Form::text('name',null,array('class'=>'form-control','placeholder'=>__('Enter Room No')))}}
         </div>
-		<div class="form-group col-md-3">
-            {{Form::label('tages',__('Rack No'),array('class'=>'form-label'))}}
-            {{Form::text('name',null,array('class'=>'form-control','placeholder'=>__('Enter Rack No')))}}
-        </div>
-        <div class="form-group col-md-3">
-            {{Form::label('stage_id',__('Shlef No'),array('class'=>'form-label'))}}
-            {{Form::text('name',null,array('class'=>'form-control','placeholder'=>__('Enter Shelf No')))}}
-        </div>
-		<div class="form-group col-md-3">
-            {{Form::label('stage_id',__('Box No'),array('class'=>'form-label'))}}
-            {{Form::text('name',null,array('class'=>'form-control','placeholder'=>__('Enter Box No')))}}
-        </div>
-		 <div class="form-group  col-md-6">
+        <div class="form-group  col-md-4">
             {{Form::label('document',__('Document'),array('class'=>'form-label'))}}
             {{Form::file('document',array('class'=>'form-control'))}}
+        </div>
+        <div class="form-group col-md-4">
+            {{Form::label('tages',__('Tages'),array('class'=>'form-label'))}}
+            {{Form::select('tages[]',$tages,null,array('class'=>'form-control hidesearch','multiple'))}}
+        </div>
+        <div class="form-group col-md-4">
+            {{Form::label('stage_id',__('Stage'),array('class'=>'form-label'))}}
+            {{Form::select('stage_id',$stage_id,null,array('class'=>'form-control hidesearch'))}}
         </div>
         <div class="form-group  col-md-12">
             {{Form::label('description',__('Description'),array('class'=>'form-label'))}}
@@ -51,7 +41,7 @@
 </div>
 <div class="modal-footer">
 
-    {{Form::submit(__('SUBMIT'),array('class'=>'btn btn-secondary btn-rounded'))}}
+    {{Form::submit(__('Create'),array('class'=>'btn btn-secondary btn-rounded'))}}
 </div>
 {{ Form::close() }}
 <script>

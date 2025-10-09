@@ -10,8 +10,6 @@ declare(strict_types=1);
 namespace Nette\Utils;
 
 use Nette;
-use function array_merge, count, func_get_args, func_num_args, glob, implode, is_array, is_dir, iterator_to_array, preg_match, preg_quote, preg_replace, preg_split, rtrim, spl_object_id, sprintf, str_ends_with, str_starts_with, strnatcmp, strpbrk, strrpos, strtolower, strtr, substr, usort;
-use const GLOB_NOESCAPE, GLOB_NOSORT, GLOB_ONLYDIR;
 
 
 /**
@@ -301,7 +299,7 @@ class Finder implements \IteratorAggregate
 			$operator = $operator ?: '=';
 		}
 
-		$date = DateTime::from($date)->getTimestamp();
+		$date = DateTime::from($date)->format('U');
 		return $this->filter(fn(FileInfo $file): bool => !$file->isFile() || Helpers::compare($file->getMTime(), $operator, $date));
 	}
 
@@ -339,7 +337,7 @@ class Finder implements \IteratorAggregate
 
 
 	/**
-	 * @param  array<object{pattern: string, mode: string, recursive: bool}>  $searches
+	 * @param  array<\stdClass{pattern: string, mode: string, recursive: bool}>  $searches
 	 * @param  string[]  $subdirs
 	 * @return \Generator<string, FileInfo>
 	 */
@@ -387,7 +385,7 @@ class Finder implements \IteratorAggregate
 			$relativePathname = FileSystem::unixSlashes($file->getRelativePathname());
 			foreach ($searches as $search) {
 				if (
-					$file->{'is' . $search->mode}()
+					$file->getType() === $search->mode
 					&& preg_match($search->pattern, $relativePathname)
 					&& $this->proveFilters($this->filters, $file, $cache)
 				) {
@@ -429,7 +427,7 @@ class Finder implements \IteratorAggregate
 	}
 
 
-	/** @return array<string, array<object{pattern: string, mode: string, recursive: bool}>> */
+	/** @return array<string, array<\stdClass{pattern: string, mode: string, recursive: bool}>> */
 	private function buildPlan(): array
 	{
 		$plan = $dirCache = [];
@@ -507,6 +505,6 @@ class Finder implements \IteratorAggregate
 				'\-' => '-',
 			],
 		);
-		return '#' . $anchor . $pattern . '$#D' . (Helpers::IsWindows ? 'i' : '');
+		return '#' . $anchor . $pattern . '$#D' . (defined('PHP_WINDOWS_VERSION_BUILD') ? 'i' : '');
 	}
 }

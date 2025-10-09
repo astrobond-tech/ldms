@@ -70,10 +70,10 @@
                                 <tr>
                                     <th>{{ __('Name') }}</th>
                                     <th>{{ __('Assigned To') }}</th>
-                                    <th>{{ __('Room No') }}</th>
-                                    <th>{{ __('Rack No') }}</th>
-                                    <th>{{ __('Shelf No') }}</th>
-                                    <th>{{ __('Box No') }}</th>
+                                    <th>{{ __('Category') }}</th>
+                                    <th>{{ __('Sub Category') }}</th>
+                                    <th>{{ __('Tags') }}</th>
+                                    <th>{{ __('Stage') }}</th>
                                     <th>{{ __('Created By') }}</th>
                                     <th>{{ __('Created At') }}</th>
                                     @if (Gate::check('edit document') ||

@@ -35,6 +35,8 @@ abstract class FileDumper implements DumperInterface
     /**
      * Sets the template for the relative paths to files.
      *
+     * @param string $relativePathTemplate A template for the relative paths to files
+     *
      * @return void
      */
     public function setRelativePathTemplate(string $relativePathTemplate)
@@ -57,7 +59,7 @@ abstract class FileDumper implements DumperInterface
             if (!file_exists($fullpath)) {
                 $directory = \dirname($fullpath);
                 if (!file_exists($directory) && !@mkdir($directory, 0777, true)) {
-                    throw new RuntimeException(\sprintf('Unable to create directory "%s".', $directory));
+                    throw new RuntimeException(sprintf('Unable to create directory "%s".', $directory));
                 }
             }
 
