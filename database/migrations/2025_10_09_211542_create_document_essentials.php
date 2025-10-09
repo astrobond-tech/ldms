@@ -15,14 +15,13 @@ return new class extends Migration
     {
         Schema::create('document_essentials', function (Blueprint $table) {
             $table->id();
-                        $table->unsignedBigInteger('document_id');
+            $table->unsignedBigInteger('document_id');
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
 
             // ENUM for selection type
             $table->enum('document_type', ['book', 'document', 'paper_cutting'])
-                  ->index()
-                  ->comment('Allowed: book | document | paper_cutting');
-                        $table->boolean('is_archived')->default(false);
+                ->index()
+                ->comment('Allowed: book | document | paper_cutting');
             $table->integer('copies_total')->nullable()->default(0);
             $table->integer('copies_available')->nullable()->default(0);
             $table->string('rack')->nullable()->comment('Rack identifier');
@@ -50,7 +49,7 @@ return new class extends Migration
             $table->string('ref_number')->nullable()->comment('Document reference number');
 
             $table->string('file_number')->nullable();
-// Optional pointer to a version_histories row (preferred/current file)
+            // Optional pointer to a version_histories row (preferred/current file)
             $table->unsignedBigInteger('latest_version_history_id')->nullable()->comment('FK to version_histories.id');
             $table->foreign('latest_version_history_id')->references('id')->on('version_histories')->onDelete('set null');
 
