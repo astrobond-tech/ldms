@@ -1,13 +1,18 @@
+@php
+    $document_type_title = ucwords(str_replace('_', ' ', $document_type ?? 'document'));
+    $document_type_route = str_replace('_', '-', $document_type ?? 'document');
+@endphp
+
 @extends('layouts.app')
 @section('page-title')
-    {{ __('Document') }}
+    {{ __($document_type_title) }}
 @endsection
 @section('breadcrumb')
     <li class="breadcrumb-item">
         <a href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
     </li>
     <li class="breadcrumb-item" aria-current="page">
-        <a href="#">{{ __('Document') }}</a>
+        <a href="#">{{ __($document_type_title) }}</a>
     </li>
 @endsection
 
@@ -18,7 +23,7 @@
                 <div class="card-header">
                     <div class="row align-items-center g-2 flex-wrap">
                         <div class="col-12 col-md">
-                            <h5>{{ __('Document') }}</h5>
+                            <h5>{{ __($document_type_title) }}</h5>
                         </div>
 
                         @if (Gate::check('create document'))
@@ -35,22 +40,22 @@
                                                 <i class="ti ti-search align-text-bottom"></i> </button>
                                         </div>
                                         <div>
-                                            <a href="{{ route('document.index') }}" class="btn btn-secondary">
+                                            <a href="{{ route($document_type_route.'.index') }}" class="btn btn-secondary">
                                                 <i class="ti ti-refresh align-text-bottom"></i> </a>
                                         </div>
                                         @if (Gate::check('archive document'))
                                             <div>
-                                                <a href="{{ route('document.archive') }}" class="btn btn-secondary">
+                                                <a href="{{ route($document_type_route.'.archive') }}" class="btn btn-secondary">
                                                     <i class="ti ti-archive"></i> </a>
                                             </div>
                                         @endif
                                         @if (Gate::check('create document'))
                                             <div>
                                                 <a class="btn btn-secondary customModal" href="#!" data-size="lg"
-                                                    data-url="{{ route('document.create') }}"
-                                                    data-title="{{ __('Create Document') }}">
+                                                    data-url="{{ route($document_type_route.'.create') }}"
+                                                    data-title="{{ __('Create') }} {{ __($document_type_title) }}">
                                                     <i class="ti ti-circle-plus align-text-bottom"></i>
-                                                    {{ __('Create Document') }}
+                                                    {{ __('Create') }} {{ __($document_type_title) }}
                                                 </a>
                                             </div>
                                         @endif
@@ -116,7 +121,7 @@
                                                             data-dialog-title = "{{ __('Are you sure you want to archive this record ?') }}"
                                                             data-dialog-text = "{{ __('This record will be archived and can be restored later. Do you want to proceed?') }}"
                                                             data-bs-toggle="tooltip"
-                                                            data-bs-original-title="{{ __('archive') }}" href="#!"> <i
+                                                            data-bs-original-title="{{ __('archive') }}" href="#!" > <i
                                                                 class="fas fa-archive" style="font-size: 20px"></i></a>
                                                     @endif
                                                     {!! Form::close() !!}

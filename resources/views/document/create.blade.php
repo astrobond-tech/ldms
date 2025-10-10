@@ -1,4 +1,9 @@
-{{Form::open(array('url'=>'document','method'=>'post', 'enctype' => "multipart/form-data"))}}
+@php
+    $document_type_title = ucwords(str_replace('_', ' ', $document_type ?? 'document'));
+    $document_type_route = str_replace('_', '-', $document_type ?? 'document');
+@endphp
+
+{{Form::open(array('url'=>$document_type_route,'method'=>'post', 'enctype' => "multipart/form-data"))}}
 <div class="modal-body">
     <div class="row">
         <div class="form-group col-md-6">
@@ -37,10 +42,7 @@
             {{Form::label('description',__('Description'),array('class'=>'form-label'))}}
             {{Form::textarea('description',null,array('class'=>'form-control','rows'=>3))}}
         </div>
-        <div class="form-group col-md-6">
-            {{Form::label('document_type',__('Document Type'),array('class'=>'form-label'))}}
-            {{Form::select('document_type',['book'=>'Book','document'=>'Document','paper_cutting'=>'Paper Cutting'],null,array('class'=>'form-control hidesearch','id'=>'document_type'))}}
-        </div>
+        {{Form::hidden('document_type', $document_type ?? 'document', array('id'=>'document_type'))}}
     </div>
     <div class="row" id="book_fields" style="display: none;">
         <div class="form-group col-md-6">
@@ -161,4 +163,3 @@
         });
     });
 </script>
-

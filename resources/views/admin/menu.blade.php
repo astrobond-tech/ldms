@@ -105,22 +105,77 @@
                             </a>
                         </li>
                     @endif
-                    @if (Gate::check('manage document'))
-                        <li
-                            class="pc-item {{ in_array($routeName, ['document.index', 'document.show', 'document.comment', 'document.reminder', 'document.version.history', 'document.share', 'document.send.email', 'document.archive']) ? 'active' : '' }}">
-                            <a href="{{ route('document.index') }}" class="pc-link">
-                                <span class="pc-micon"><i data-feather="file-text"></i></span>
-                                <span class="pc-mtext">{{ __('All Documents') }}</span>
+                    @if (Gate::check('manage document') || Gate::check('manage my document'))
+                        <li class="pc-item pc-hasmenu {{ str_starts_with($routeName, 'document.') ? 'pc-trigger active' : '' }}">
+                            <a href="#!" class="pc-link">
+                                <span class="pc-micon">
+                                    <i data-feather="file-text"></i>
+                                </span>
+                                <span class="pc-mtext">{{ __('Documents') }}</span>
+                                <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
                             </a>
+                            <ul class="pc-submenu" style="display: {{ str_starts_with($routeName, 'document.') ? 'block' : 'none' }}">
+                                @if (Gate::check('manage document'))
+                                    <li class="pc-item {{ in_array($routeName, ['document.index', 'document.show']) ? 'active' : '' }}">
+                                        <a class="pc-link" href="{{ route('document.index') }}">{{ __('All Documents') }}</a>
+                                    </li>
+                                @endif
+                                @if (Gate::check('manage my document'))
+                                    <li class="pc-item {{ $routeName == 'document.my-document' ? 'active' : '' }}">
+                                        <a class="pc-link" href="{{ route('document.my-document') }}">{{ __('My Documents') }}</a>
+                                    </li>
+                                @endif
+                            </ul>
                         </li>
                     @endif
-                    @if (Gate::check('manage my document'))
-                        <li
-                            class="pc-item {{ Request::route()->getName() == 'document.my-document' ? 'active' : '' }}">
-                            <a href="{{ route('document.my-document') }}" class="pc-link">
-                                <span class="pc-micon"><i data-feather="file"></i></span>
-                                <span class="pc-mtext">{{ __('My Documents') }}</span>
+
+                    {{-- Book Menu --}}
+                    @if (Gate::check('manage document') || Gate::check('manage my document'))
+                        <li class="pc-item pc-hasmenu {{ str_starts_with($routeName, 'book.') ? 'pc-trigger active' : '' }}">
+                            <a href="#!" class="pc-link">
+                                <span class="pc-micon">
+                                    <i data-feather="book"></i>
+                                </span>
+                                <span class="pc-mtext">{{ __('Books') }}</span>
+                                <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
                             </a>
+                            <ul class="pc-submenu" style="display: {{ str_starts_with($routeName, 'book.') ? 'block' : 'none' }}">
+                                @if (Gate::check('manage document'))
+                                    <li class="pc-item {{ in_array($routeName, ['book.index', 'book.show']) ? 'active' : '' }}">
+                                        <a class="pc-link" href="{{ route('book.index') }}">{{ __('All Books') }}</a>
+                                    </li>
+                                @endif
+                                @if (Gate::check('manage my document'))
+                                    <li class="pc-item {{ $routeName == 'book.my-document' ? 'active' : '' }}">
+                                        <a class="pc-link" href="{{ route('book.my-document') }}">{{ __('My Books') }}</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+
+                    {{-- Paper Cutting Menu --}}
+                    @if (Gate::check('manage document') || Gate::check('manage my document'))
+                        <li class="pc-item pc-hasmenu {{ str_starts_with($routeName, 'paper-cutting.') ? 'pc-trigger active' : '' }}">
+                            <a href="#!" class="pc-link">
+                                <span class="pc-micon">
+                                    <i data-feather="scissors"></i>
+                                </span>
+                                <span class="pc-mtext">{{ __('Paper Cuttings') }}</span>
+                                <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                            </a>
+                            <ul class="pc-submenu" style="display: {{ str_starts_with($routeName, 'paper-cutting.') ? 'block' : 'none' }}">
+                                @if (Gate::check('manage document'))
+                                    <li class="pc-item {{ in_array($routeName, ['paper-cutting.index', 'paper-cutting.show']) ? 'active' : '' }}">
+                                        <a class="pc-link" href="{{ route('paper-cutting.index') }}">{{ __('All Paper Cuttings') }}</a>
+                                    </li>
+                                @endif
+                                @if (Gate::check('manage my document'))
+                                    <li class="pc-item {{ $routeName == 'paper-cutting.my-document' ? 'active' : '' }}">
+                                        <a class="pc-link" href="{{ route('paper-cutting.my-document') }}">{{ __('My Paper Cuttings') }}</a>
+                                    </li>
+                                @endif
+                            </ul>
                         </li>
                     @endif
                     @if (Gate::check('manage reminder'))

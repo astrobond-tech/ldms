@@ -28,9 +28,23 @@ class DocumentController extends Controller
     public function index(Request $request)
     {
         if (\Auth::user()->can('manage document')) {
+
+            $path = $request->path();
+            $document_type = 'document';
+            if (str_starts_with($path, 'book')) {
+                $document_type = 'book';
+            } elseif (str_starts_with($path, 'paper-cutting')) {
+                $document_type = 'paper_cutting';
+            }
+
             $category = Category::where('parent_id', parentId())->get()->pluck('title', 'id')->prepend(__('Select Category'), '');
             $stages = Stage::where('parent_id', parentId())->get()->pluck('title', 'id')->prepend(__('Select Stage'), '');
             $documents_query = Document::where('parent_id', '=', parentId())->where('archive', 0);
+
+            $documents_query->whereHas('essential', function ($q) use ($document_type) {
+                $q->where('document_type', $document_type);
+            });
+
             if (!empty($request->category)) {
                 $documents_query->where('category_id', $request->category);
             }
@@ -42,15 +56,23 @@ class DocumentController extends Controller
             }
             $documents = $documents_query->OrderBy('id', 'desc')->get();
             session()->flashInput($request->input());
-            return view('document.index', compact('documents', 'category', 'stages'));
+            return view('document.index', compact('documents', 'category', 'stages', 'document_type'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
     }
 
 
-    public function create()
+    public function create(Request $request)
     {
+        $path = $request->path();
+        $document_type = 'document';
+        if (str_starts_with($path, 'book')) {
+            $document_type = 'book';
+        } elseif (str_starts_with($path, 'paper-cutting')) {
+            $document_type = 'paper_cutting';
+        }
+
         $category = Category::where('parent_id', parentId())->get()->pluck('title', 'id');
         $category->prepend(__('Select Category'), '');
         $tages = Tag::where('parent_id', parentId())->get()->pluck('title', 'id');
@@ -58,7 +80,7 @@ class DocumentController extends Controller
         $client = User::where('parent_id', parentId())->where('type', 'client')->get()->mapWithKeys(function ($user) {
             return [$user->id => $user->first_name . ' ' . $user->last_name];
         })->prepend(__('Select Client'), '');
-        return view('document.create', compact('category', 'tages', 'client', 'stage_id'));
+        return view('document.create', compact('category', 'tages', 'client', 'stage_id', 'document_type'));
     }
 
 
@@ -182,8 +204,16 @@ class DocumentController extends Controller
     }
 
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
+        $path = $request->path();
+        $document_type = 'document';
+        if (str_starts_with($path, 'book')) {
+            $document_type = 'book';
+        } elseif (str_starts_with($path, 'paper-cutting')) {
+            $document_type = 'paper_cutting';
+        }
+
         $id = decrypt($id);
         $document = Document::with('essential')->find($id);
 
@@ -195,7 +225,7 @@ class DocumentController extends Controller
         $client = User::where('parent_id', parentId())->where('type', 'client')->get()->mapWithKeys(function ($user) {
             return [$user->id => $user->first_name . ' ' . $user->last_name];
         })->prepend(__('Select Client'), '');
-        return view('document.edit', compact('document', 'category', 'tages', 'stage_id', 'client'));
+        return view('document.edit', compact('document', 'category', 'tages', 'stage_id', 'client', 'document_type'));
     }
 
 
@@ -310,18 +340,34 @@ class DocumentController extends Controller
         }
     }
 
-    public function myDocument()
+    public function myDocument(Request $request)
     {
         if (\Auth::user()->can('manage my document')) {
-            $assign_doc = shareDocument::where('user_id', \Auth::user()->id)->get()->pluck('document_id');
 
-            $documents = Document::where('created_by', '=', \Auth::user()->id);
-            if (!empty($assign_doc)) {
-                $documents->orWhereIn('id', $assign_doc);
+            $path = $request->path();
+            $document_type = 'document';
+            if ($path == 'my-book') {
+                $document_type = 'book';
+            } elseif ($path == 'my-paper-cutting') {
+                $document_type = 'paper_cutting';
             }
 
-            $documents = $documents->OrderBy('id', 'desc')->get();
-            return view('document.own', compact('documents'));
+            $assign_doc = shareDocument::where('user_id', \Auth::user()->id)->get()->pluck('document_id');
+
+            $documents_query = Document::where(function ($query) use ($assign_doc) {
+                $query->where('created_by', \Auth::user()->id);
+                if (!$assign_doc->isEmpty()) {
+                    $query->orWhereIn('id', $assign_doc);
+                }
+            });
+
+            $documents_query->whereHas('essential', function ($q) use ($document_type) {
+                $q->where('document_type', $document_type);
+            });
+
+            $documents = $documents_query->orderBy('id', 'desc')->get();
+
+            return view('document.own', compact('documents', 'document_type'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }

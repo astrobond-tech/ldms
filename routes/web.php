@@ -310,6 +310,53 @@ Route::group(
     }
 );
 
+Route::group(
+    [
+        'middleware' => [
+            'auth',
+            'XSS',
+        ],
+    ],
+    function () {
+        Route::get('book/history', [DocumentController::class, 'history'])->name('document.history');
+        Route::resource('book', DocumentController::class);
+        Route::get('my-book', [DocumentController::class, 'myDocument'])->name('book.my-document');
+        Route::get('book/{id}/comment', [DocumentController::class, 'comment'])->name('document.comment');
+        Route::post('book/{id}/comment', [DocumentController::class, 'commentData'])->name('document.comment');
+        Route::get('book/{id}/reminder', [DocumentController::class, 'reminder'])->name('document.reminder');
+        Route::get('book/{id}/add-reminder', [DocumentController::class, 'addReminder'])->name('document.add.reminder');
+        Route::get('book/{id}/version-history', [DocumentController::class, 'versionHistory'])->name('document.version.history');
+        Route::post('book/{id}/version-history', [DocumentController::class, 'newVersion'])->name('document.new.version');
+        Route::get('book/{id}/share', [DocumentController::class, 'shareDocument'])->name('document.share');
+        Route::post('book/{id}/share', [DocumentController::class, 'shareDocumentData'])->name('document.share');
+        Route::get('book/{id}/add-share', [DocumentController::class, 'addshareDocumentData'])->name('document.add.share');
+        Route::delete('book/{id}/share/destroy', [DocumentController::class, 'shareDocumentDelete'])->name('document.share.destroy');
+        Route::get('book/{id}/send-email', [DocumentController::class, 'sendEmail'])->name('document.send.email');
+        Route::post('book/{id}/send-email', [DocumentController::class, 'sendEmailData'])->name('document.send.email');
+        Route::get('book/{id}/Sharelink', [DocumentController::class, 'Sharelink'])->name('document.Sharelink');
+        Route::get('book-GenerateSharelink', [DocumentController::class, 'GenerateSharelink'])->name('generate.shareable.link');
+        Route::get('book/{id}/archive', [DocumentController::class, 'archive'])->name('archive');
+        Route::get('book/{id}/unarchive', [DocumentController::class, 'unarchive'])->name('unarchive');
+        Route::get('book-archive', [DocumentController::class, 'documentArchive'])->name('book.archive');
+    }
+);
+
+
+Route::group(
+    [
+        'middleware' => [
+            'auth',
+            'XSS',
+        ],
+    ],
+    function () {
+        Route::resource('paper-cutting', DocumentController::class);
+        Route::get('my-paper-cutting', [DocumentController::class, 'myDocument'])->name('paper-cutting.my-document');
+        Route::get('paper-cutting-archive', [DocumentController::class, 'documentArchive'])->name('paper-cutting.archive');
+    }
+);
+
+
 //-------------------------------Reminder-------------------------------------------
 
 Route::group(

@@ -1,5 +1,8 @@
+@php
+    $document_type_route = str_replace('_', '-', $document_type ?? 'document');
+@endphp
 
-{{Form::model($document, array('route' => array('document.update', encrypt($document->id)), 'method' => 'PUT','enctype' => "multipart/form-data")) }}
+{{Form::model($document, array('route' => array($document_type_route.'.update', encrypt($document->id)), 'method' => 'PUT','enctype' => "multipart/form-data")) }}
 <div class="modal-body">
     <div class="row">
 
@@ -35,10 +38,7 @@
             {{Form::label('description',__('Description'),array('class'=>'form-label'))}}
             {{Form::textarea('description',null,array('class'=>'form-control','rows'=>3))}}
         </div>
-        <div class="form-group col-md-6">
-            {{Form::label('document_type',__('Document Type'),array('class'=>'form-label'))}}
-            {{Form::select('document_type',['book'=>'Book','document'=>'Document','paper_cutting'=>'Paper Cutting'],optional($document->essential)->document_type,array('class'=>'form-control hidesearch','id'=>'document_type'))}}
-        </div>
+        {{Form::hidden('document_type', $document_type, array('id'=>'document_type'))}}
     </div>
     <div class="row" id="book_fields" style="display: none;">
         <div class="form-group col-md-6">
@@ -163,6 +163,3 @@
         });
     });
 </script>
-
-
-
