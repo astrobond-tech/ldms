@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class BookStoreController extends Controller
 {
     // Display all books
-    public function index()
+    public function index(Request $request)
     {
         $books = BookStore::orderBy('id', 'desc')->get();
         return view('book_store.index', compact('books'));
@@ -25,6 +25,7 @@ class BookStoreController extends Controller
     // Store new book in database
     public function store(Request $request)
     {
+       
         $rules = [
             'book_name'          => 'required|string|max:355',
             'description'        => 'nullable|string',
@@ -63,7 +64,7 @@ class BookStoreController extends Controller
         $book->box_no = $request->box_no;
         $book->created_by = auth()->id();
         $book->user_id = auth()->id();
-
+    
         // Handle file upload only if provided and not offline-only
         if ($request->hasFile('book_file')) {
             $file = $request->file('book_file');
@@ -80,6 +81,7 @@ class BookStoreController extends Controller
 
         $book->created_at = Carbon::now();
         $book->save();
+        
 
         return redirect()->route('book-store.index')->with('success', __('Book successfully created!'));
     }

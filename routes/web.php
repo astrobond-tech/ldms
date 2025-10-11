@@ -29,6 +29,7 @@ use App\Http\Controllers\BookAssignController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookStoreController;
 use App\Http\Controllers\PaperCuttingController;
+use App\Http\Controllers\DocumentStoreController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -435,6 +436,30 @@ Route::group(
         Route::get('book-store/archive/list', [BookStoreController::class, 'archiveList'])->name('book-store.archive.list');
     }
 );
+//------------------------------- Document Store -------------------------------------------
+Route::group(['middleware' => ['auth']], function() {
+
+    // List all documents
+     Route::resource('document-store', DocumentStoreController::class);
+
+    // Show form to create a new document
+    Route::get('document-store/create', [DocumentStoreController::class, 'create'])->name('document-store.create');
+
+    // Store new document
+    Route::post('document-store', [DocumentStoreController::class, 'store'])->name('document-store.store');
+
+    // Show a single document
+    Route::get('document-store/{documentStore}', [DocumentStoreController::class, 'show'])->name('document-store.show');
+
+    // Show form to edit a document
+    Route::get('document-store/{documentStore}/edit', [DocumentStoreController::class, 'edit'])->name('document-store.edit');
+
+    // Update a document
+    Route::put('document-store/{documentStore}', [DocumentStoreController::class, 'update'])->name('document-store.update');
+
+    // Delete a document
+    Route::delete('document-store/{documentStore}', [DocumentStoreController::class, 'destroy'])->name('document-store.destroy');
+});
 //------------------------------- Paper Cutting -------------------------------------------
 Route::group(['middleware' => ['auth']], function () {
 

@@ -41,10 +41,9 @@ class BookAssignController extends Controller
         return view('book_assign.index', compact('bookAssigns', 'users', 'books'));
     }
 	public function create()
-	{
-		$clients = \App\Models\User::pluck('name', 'id'); // or whatever your assign_to list is
-		return view('bookassign.create', compact('clients'));
-	}
+    {
+        return view('book_assign.create');
+    }
 
 	public function store(Request $request)
 	{
@@ -79,7 +78,7 @@ class BookAssignController extends Controller
 	}
 
     /**
-     * Show the form for creating a new book assignment.
+     Show the form for creating a new book assignment.
     
     public function create()
     {
@@ -94,7 +93,7 @@ class BookAssignController extends Controller
     }
  */
     /**
-     * Store a newly created book assignment in storage.
+      Store a newly created book assignment in storage.
     
     public function store(Request $request)
     {
@@ -130,7 +129,7 @@ class BookAssignController extends Controller
     }
  */
     /**
-     * Display the specified book assignment.
+      Display the specified book assignment.
      */
     public function show($id)
     {

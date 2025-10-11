@@ -1,16 +1,17 @@
-@extends('layouts.app')
-@section('page-title')
-    {{ __('Dashboard') }}
-@endsection
-@section('breadcrumb')
-    <li class="breadcrumb-item" aria-current="page">{{ __('Dashboard') }}</li>
-@endsection
-@push('script-page')
+
+<?php $__env->startSection('page-title'); ?>
+    <?php echo e(__('Dashboard')); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('breadcrumb'); ?>
+    <li class="breadcrumb-item" aria-current="page"><?php echo e(__('Dashboard')); ?></li>
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('script-page'); ?>
     <script>
-        var documentByCategoryData = {!! json_encode($result['documentByCategory']['data']) !!};
-        var documentByCategory = {!! json_encode($result['documentByCategory']['category']) !!};
-        var documentBySubCategoryData = {!! json_encode($result['documentBySubCategory']['data']) !!};
-        var documentBySubCategory = {!! json_encode($result['documentBySubCategory']['category']) !!};
+        var documentByCategoryData = <?php echo json_encode($result['documentByCategory']['data']); ?>;
+        var documentByCategory = <?php echo json_encode($result['documentByCategory']['category']); ?>;
+        var documentBySubCategoryData = <?php echo json_encode($result['documentBySubCategory']['data']); ?>;
+        var documentBySubCategory = <?php echo json_encode($result['documentBySubCategory']['category']); ?>;
     </script>
 
     <script>
@@ -78,13 +79,13 @@
 
 
     <script>
-        var eventData = {!! json_encode($eventData) !!};
+        var eventData = <?php echo json_encode($eventData); ?>;
         // var eventData = [{"title":"1 - Annual Gala Night","start":"2024-09-18","end":"2024-10-16"},{"title":"2 - Weekend Hike Adventure","start":"2024-10-01","end":"2024-09-29"},{"title":"3 - Networking Breakfast","start":"2024-11-02","end":"2024-10-31"},{"title":"4 - Monthly Book Club","start":"2024-11-06","end":"2024-11-03"},{"title":"5 - Family Fun Day","start":"2024-11-10","end":"2024-11-08"},{"title":"6 - First event","start":"2025-06-13","end":"2025-05-16"},{"title":"7 - Tree planting","start":"2025-06-25","end":"2025-06-25"},{"title":"8 - Tree planting","start":"2025-06-25","end":"2025-06-25"},{"title":"8 - TEST","start":"2025-07-12","end":"2025-07-12"}];
     </script>
-    <script src="{{ asset('assets/js/plugins/index.global.min.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/calendar.js') }}"></script>
-@endpush
-@section('content')
+    <script src="<?php echo e(asset('assets/js/plugins/index.global.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/pages/calendar.js')); ?>"></script>
+<?php $__env->stopPush(); ?>
+<?php $__env->startSection('content'); ?>
     <div class="row">
         <div class="col-lg-3 col-md-6">
             <div class="card">
@@ -96,9 +97,9 @@
                             </div>
                         </div>
                        <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('document.index') }}"><p class="mb-1">{{ __('Total Document') }}</p>
+                            <a href="<?php echo e(route('document.index')); ?>"><p class="mb-1"><?php echo e(__('Total Document')); ?></p>
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['totalDocument'] }}</h4>
+                                    <h4 class="mb-0"><?php echo e($result['totalDocument']); ?></h4>
                                 </div>
                             </a>
                         </div>
@@ -116,9 +117,9 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('document.my-document') }}"><p class="mb-1">{{ __('Today Document') }}</p>
+                            <a href="<?php echo e(route('document.my-document')); ?>"><p class="mb-1"><?php echo e(__('Today Document')); ?></p>
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['todayDocument'] }}</h4>
+                                    <h4 class="mb-0"><?php echo e($result['todayDocument']); ?></h4>
                                 </div>
                             </a>
                         </div>
@@ -136,10 +137,10 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-							<a href="{{ route('book-assign.index') }}">
-								<p class="mb-1">{{ __('Assign Books') }}</p>
+							<a href="<?php echo e(route('book-assign.index')); ?>">
+								<p class="mb-1"><?php echo e(__('Assign Books')); ?></p>
 								<div class="d-flex align-items-center justify-content-between">
-									<h4 class="mb-0">{{ $result['totalBooks'] ?? 0 }}</h4>
+									<h4 class="mb-0"><?php echo e($result['totalBooks'] ?? 0); ?></h4>
 								</div>
 							</a>
 						</div>
@@ -157,9 +158,9 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('document.my-document') }}"><p class="mb-1">{{ __('Books Store') }}</p>
+                            <a href="<?php echo e(route('document.my-document')); ?>"><p class="mb-1"><?php echo e(__('Books Store')); ?></p>
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['totalBookStore'] }}</h4>
+                                    <h4 class="mb-0"><?php echo e($result['totalBookStore']); ?></h4>
                                 </div>
                             </a>
                         </div>
@@ -177,9 +178,9 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('paper-cutting.index') }}"><p class="mb-1">{{ __('Total Paper Cutting') }}</p>
+                            <a href="<?php echo e(route('paper-cutting.index')); ?>"><p class="mb-1"><?php echo e(__('Total Paper Cutting')); ?></p>
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['totalReminder'] }}</h4>
+                                    <h4 class="mb-0"><?php echo e($result['totalReminder']); ?></h4>
                                 </div>
                             </a>
                         </div>
@@ -197,9 +198,10 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('paper-cutting.index') }}"><p class="mb-1">{{ __('Today Paper Cutting') }}</p>
+                            <a href="<?php echo e(route('paper-cutting.index')); ?>"><p class="mb-1"><?php echo e(__('Today Paper Cutting')); ?></p>
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['todayReminder'] }}
+                                    <h4 class="mb-0"><?php echo e($result['todayReminder']); ?>
+
                                     </h4>
                                 </div>
                             </a>
@@ -218,9 +220,9 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <a href="{{ route('users.index') }}"><p class="mb-1">{{ __('Total Users') }}</p>
+                            <a href="<?php echo e(route('users.index')); ?>"><p class="mb-1"><?php echo e(__('Total Users')); ?></p>
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">{{ $result['totalUser'] }}</h4>
+                                    <h4 class="mb-0"><?php echo e($result['totalUser']); ?></h4>
                                 </div>
                             </a>
                         </div>
@@ -234,7 +236,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-start justify-content-between">
                         <div>
-                            <h5 class="mb-1">{{ __('Document By Category') }}</h5>
+                            <h5 class="mb-1"><?php echo e(__('Document By Category')); ?></h5>
                         </div>
                     </div>
                     <div id="pie_documentByCategory"></div>
@@ -247,7 +249,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-start justify-content-between">
                         <div>
-                            <h5 class="mb-1">{{ __('Document By Category') }}</h5>
+                            <h5 class="mb-1"><?php echo e(__('Document By Category')); ?></h5>
                         </div>
                     </div>
                     <div id="pie_documentBySubCategory"></div>
@@ -258,7 +260,7 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-1">{{ __('Reminder') }}</h5>
+                    <h5 class="mb-1"><?php echo e(__('Reminder')); ?></h5>
                 </div>
 
                 <div class="card-body">
@@ -286,7 +288,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-1"><b>{{ __('Title') }}</b></h5>
+                            <h5 class="mb-1"><b><?php echo e(__('Title')); ?></b></h5>
                             <p class="pc-event-title text-muted"></p>
                         </div>
                     </div>
@@ -297,7 +299,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-1"><b>{{ __('Start Date') }}</b></h5>
+                            <h5 class="mb-1"><b><?php echo e(__('Start Date')); ?></b></h5>
                             <p class="pc-event-date text-muted"></p>
                         </div>
                     </div>
@@ -308,7 +310,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-1"><b>{{ __('Start time') }}</b></h5>
+                            <h5 class="mb-1"><b><?php echo e(__('Start time')); ?></b></h5>
                             <p class="pc-event-time text-muted"></p>
                         </div>
                     </div>
@@ -323,4 +325,6 @@
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\bdtech\ldms\resources\views/dashboard/index.blade.php ENDPATH**/ ?>

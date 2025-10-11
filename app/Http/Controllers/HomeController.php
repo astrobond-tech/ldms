@@ -18,6 +18,7 @@ use App\Models\Category;
 use App\Models\Document;
 use App\Models\Reminder;
 use App\Models\SubCategory;
+use App\Models\BookStore;
 
 
 class HomeController extends Controller
@@ -39,10 +40,11 @@ class HomeController extends Controller
                 return view('dashboard.super_admin', compact('result'));
             } else {
                 $result['totalUser'] = User::where('parent_id', parentId())->count();
-                $result['totalDocument'] = Document::where('parent_id', parentId())->count();
+                $result['totalDocument'] = Document::count();
                 $result['todayDocument'] = Document::whereDate('created_at', Carbon::today())->where('parent_id', parentId())->count();
                 $result['totalCategory'] = Category::where('parent_id', parentId())->count();
                 $result['totalReminder'] = Reminder::where('parent_id', parentId())->count();
+                $result['totalBookStore'] = BookStore::count();
                 $result['todayReminder'] = Reminder::whereDate('date', Carbon::today())->where('parent_id', parentId())->count();
                 $result['totalContact'] = Contact::where('parent_id', \Auth::user()->id)->count();
                 $result['documentByCategory'] = $this->documentByCategory();

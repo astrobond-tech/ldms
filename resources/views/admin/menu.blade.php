@@ -113,6 +113,12 @@
                                 <span class="pc-mtext">{{ __('All Documents') }}</span>
                             </a>
                         </li>
+                        <li class="pc-item {{ in_array($routeName, ['document-store.index']) ? 'active' : '' }}">
+                            <a href="{{ route('document-store.index') }}" class="pc-link">
+                                <span class="pc-micon"><i data-feather="file-text"></i></span>
+                                <span class="pc-mtext">{{ __('Documents Store') }}</span>
+                            </a>
+                        </li>
                     @endif
                     @if (Gate::check('manage my document'))
                         <li

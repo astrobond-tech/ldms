@@ -18,7 +18,11 @@ class Document extends Model
         'description',
         'tages',
         'created_by',
-        'parent_id'
+        'parent_id',
+        'room_no',
+        'rack_no',
+        'shelf_no',
+        'box_no',
     ];
 
     public function category()

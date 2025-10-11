@@ -69,11 +69,11 @@ class DocumentController extends Controller
                 $request->all(),
                 [
                     'name' => 'required',
-                    'category_id' => 'required',
-                    'sub_category_id' => 'required',
-                    'document' => 'required',
-                    'stage_id' => 'required',
-                    'assign_to' => 'required',
+                  //  'category_id' => 'required',
+                  //  'sub_category_id' => 'required',
+                  //  'document' => 'required',
+                  //  'stage_id' => 'required',
+                  //  'assign_to' => 'required',
                 ]
             );
             if ($validator->fails()) {
