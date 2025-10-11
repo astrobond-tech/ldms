@@ -129,8 +129,8 @@
                                                         <a class="avtar avtar-xs btn-link-info text-secondary customModal"
                                                             data-bs-toggle="tooltip" data-size="md"
                                                             data-bs-original-title="{{ __('Share') }}" href="#!"
-                                                            data-url="{{ route('document.Sharelink', encrypt($document->id)) }}"
-                                                            data-title="{{ __('Document Share') }}"> <i
+                                                            data-url="{{ route($document_type_route.'.Sharelink', encrypt($document->id)) }}"
+                                                            data-title="{{ __($document_type_title . ' Share') }}"> <i
                                                                 data-feather="link"></i></a>
                                                     @endif
                                                     @if (Gate::check('show document'))

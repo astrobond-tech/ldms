@@ -86,7 +86,7 @@
 @endpush
 @section('content')
     <div class="row">
-        <div class="col-lg-3 col-md-6">
+        {{-- <div class="col-lg-3 col-md-6">
             <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('users.index') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="col-lg-3 col-md-6">
             <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('document.index') }}'">
                 <div class="card-body">
@@ -115,7 +115,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <p class="mb-1">{{ __('Total Document') }}</p>
+                            <p class="mb-1">{{ __('Document') }}</p>
                             <div class="d-flex align-items-center justify-content-between">
                                 <h4 class="mb-0">{{ $result['totalDocument'] }}</h4>
                             </div>
@@ -124,7 +124,47 @@
                 </div>
             </div>
         </div>
+
         <div class="col-lg-3 col-md-6">
+            <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('book.index') }}'">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="avtar bg-light-warning">
+                                <i class="ti ti-package f-24"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-1">{{ __('Book') }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">{{ $result['totalDocument'] }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('paper-cutting.index') }}'">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="avtar bg-light-warning">
+                                <i class="ti ti-package f-24"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <p class="mb-1">{{ __('Paper Cutting') }}</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">{{ $result['totalDocument'] }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- <div class="col-lg-3 col-md-6">
             <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('document.index') }}?created_date={{ now()->format('Y-m-d') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -142,8 +182,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
+        </div> --}}
+        {{-- <div class="col-lg-3 col-md-6">
             <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('category.index') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -161,8 +201,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
+        </div> --}}
+        {{-- <div class="col-lg-3 col-md-6">
             <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('reminder.index') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -181,8 +221,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
+        </div> --}}
+        {{-- <div class="col-lg-3 col-md-6">
             <div class="card"  >
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -201,7 +241,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="col-lg-3 col-md-6">
             <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('contact.index') }}'">
                 <div class="card-body">

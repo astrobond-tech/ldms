@@ -796,10 +796,18 @@ class DocumentController extends Controller
     }
 
 
-    public function Sharelink($id)
+    public function Sharelink(Request $request, $id)
     {
         if (\Auth::user()->can('share documents')) {
-            return view('document.Sharelink', compact('id'));
+            $path = $request->path();
+            $document_type = 'document';
+            if (str_contains($path, 'book/')) {
+                $document_type = 'book';
+            } elseif (str_contains($path, 'paper-cutting/')) {
+                $document_type = 'paper-cutting';
+            }
+            $document_type_route = str_replace('_', '-', $document_type);
+            return view('document.Sharelink', compact('id', 'document_type_route'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }

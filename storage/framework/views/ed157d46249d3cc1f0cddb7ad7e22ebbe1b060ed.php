@@ -2,23 +2,27 @@
     <div class="row">
         <div class="form-group col-md-12">
             <div class="form-check form-switch">
-                {!! Form::checkbox('exp_date_status', 1, null, [
+                <?php echo Form::checkbox('exp_date_status', 1, null, [
                     'class' => 'form-check-input scsh',
                     'id' => 'flexSwitchCheckChecked',
                     'role' => 'switch',
-                ]) !!}
-                {!! Form::label('flexSwitchCheckChecked', __('Link expiration'), ['class' => 'form-check-label h4']) !!}
+                ]); ?>
+
+                <?php echo Form::label('flexSwitchCheckChecked', __('Link expiration'), ['class' => 'form-check-label h4']); ?>
+
             </div>
-            {{ Form::date('exp_date', null, ['class' => 'form-control sse d-none']) }}
+            <?php echo e(Form::date('exp_date', null, ['class' => 'form-control sse d-none'])); ?>
+
         </div>
         <hr>
         <div class="form-group col-md-12">
             <div class="form-check form-switch">
                 <input class="form-check-input scsh" type="checkbox" role="switch" id="flexSwitchCheckChecked"
                     name="password_status" value="1">
-                <label class="form-check-label h4" for="flexSwitchCheckChecked">{{ __('Password Protection') }}</label>
+                <label class="form-check-label h4" for="flexSwitchCheckChecked"><?php echo e(__('Password Protection')); ?></label>
             </div>
-            {{ Form::text('password', null, ['class' => 'form-control sse d-none', 'placeholder' => __('Enter Password')]) }}
+            <?php echo e(Form::text('password', null, ['class' => 'form-control sse d-none', 'placeholder' => __('Enter Password')])); ?>
+
         </div>
         <hr>
         <div class="form-group col-md-12">
@@ -31,7 +35,8 @@
     </div>
 </div>
 <div class="modal-footer">
-    {{ Form::button(__('Genarate Link'), ['class' => 'btn btn-secondary btn-rounded genarate_link']) }}
+    <?php echo e(Form::button(__('Genarate Link'), ['class' => 'btn btn-secondary btn-rounded genarate_link'])); ?>
+
 </div>
 
 
@@ -52,14 +57,14 @@
 
     $(document).on('click', '.genarate_link', function() {
         $.ajax({
-            url: '{{ route($document_type_route . '.generate.shareable.link') }}',
+            url: '<?php echo e(route($document_type_route . '.generate.shareable.link')); ?>',
             type: 'GET',
             data: {
                 exp_date: $('input[name="exp_date_status"]').is(':checked') ? $(
                     'input[name="exp_date"]').val() : '',
                 password: $('input[name="password_status"]').is(':checked') ? $(
                     'input[name="password"]').val() : '',
-                did: '{{ $id }}',
+                did: '<?php echo e($id); ?>',
             },
             success: function(response) {
                 if (response.url) {
@@ -73,3 +78,4 @@
         });
     });
 </script>
+<?php /**PATH /home/khalid/Documents/ldms/resources/views/document/Sharelink.blade.php ENDPATH**/ ?>

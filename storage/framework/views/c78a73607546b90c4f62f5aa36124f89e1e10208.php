@@ -135,8 +135,8 @@
                                                         <a class="avtar avtar-xs btn-link-info text-secondary customModal"
                                                             data-bs-toggle="tooltip" data-size="md"
                                                             data-bs-original-title="<?php echo e(__('Share')); ?>" href="#!"
-                                                            data-url="<?php echo e(route('document.Sharelink', encrypt($document->id))); ?>"
-                                                            data-title="<?php echo e(__('Document Share')); ?>"> <i
+                                                            data-url="<?php echo e(route($document_type_route.'.Sharelink', encrypt($document->id))); ?>"
+                                                            data-title="<?php echo e(__($document_type_title . ' Share')); ?>"> <i
                                                                 data-feather="link"></i></a>
                                                     <?php endif; ?>
                                                     <?php if(Gate::check('show document')): ?>
