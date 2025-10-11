@@ -324,6 +324,7 @@ Route::group(
         Route::get('document/{id}/archive', [DocumentController::class, 'archive'])->name('document.archive');
         Route::get('document/{id}/unarchive', [DocumentController::class, 'unarchive'])->name('document.unarchive');
         Route::get('document-archive', [DocumentController::class, 'documentArchive'])->name('document.archive.list');
+        Route::post('document/send-share-link', [DocumentController::class, 'sendShareLinkEmail'])->name('document.send-share-link');
     }
 );
 

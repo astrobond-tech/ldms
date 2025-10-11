@@ -17,6 +17,7 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Models\DocumentEssential;
 use App\Models\VersionHistory;
+use App\Mail\ShareLinkMail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -39,7 +40,7 @@ class DocumentController extends Controller
 
             $category = Category::where('parent_id', parentId())->get()->pluck('title', 'id')->prepend(__('Select Category'), '');
             $stages = Stage::where('parent_id', parentId())->get()->pluck('title', 'id')->prepend(__('Select Stage'), '');
-            $documents_query = Document::with('essential')->where('parent_id', '=', parentId())->where('archive', 0);
+            $documents_query = Document::with(['essential', 'LastVersion'])->where('parent_id', '=', parentId())->where('archive', 0);
 
             $documents_query->whereHas('essential', function ($q) use ($document_type) {
                 $q->where('document_type', $document_type);
@@ -806,7 +807,10 @@ class DocumentController extends Controller
                 $document_type = 'paper-cutting';
             }
             $document_type_route = str_replace('_', '-', $document_type);
-            return view('document.Sharelink', compact('id', 'document_type_route'));
+
+            $clients = User::where('parent_id', parentId())->where('type', 'client')->get()->pluck('name', 'id');
+
+            return view('document.Sharelink', compact('id', 'document_type_route', 'clients'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
@@ -960,5 +964,34 @@ class DocumentController extends Controller
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
+    }
+
+    public function sendShareLinkEmail(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'clients' => 'required|array',
+            'clients.*' => 'exists:users,id',
+            'url' => 'required|url',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 422);
+        }
+
+        emailSettings(parentId()); // Load the dynamic email settings
+
+        $clients = User::whereIn('id', $request->clients)->get();
+        $emailData = [
+            'url' => $request->url,
+            'password' => $request->password,
+            'exp_date' => $request->exp_date,
+            'logo' => getSettingsValByName('company_logo'),
+        ];
+
+        foreach ($clients as $client) {
+            Mail::to($client->email)->send(new ShareLinkMail($emailData));
+        }
+
+        return response()->json(['success' => 'Emails sent successfully!']);
     }
 }

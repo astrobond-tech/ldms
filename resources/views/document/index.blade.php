@@ -122,7 +122,7 @@
                                                                 class="fas fa-archive" style="font-size: 20px"></i></a>
                                                     @endif
                                                     {!! Form::close() !!}
-                                                    @if (Gate::check('share documents'))
+                                                    @if (Gate::check('share documents') && $document->LastVersion)
                                                         <a class="avtar avtar-xs btn-link-info text-secondary customModal"
                                                             data-bs-toggle="tooltip" data-size="md"
                                                             data-bs-original-title="{{ __('Share') }}" href="#!"

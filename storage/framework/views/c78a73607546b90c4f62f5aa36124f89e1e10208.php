@@ -128,7 +128,7 @@
                                                     <?php endif; ?>
                                                     <?php echo Form::close(); ?>
 
-                                                    <?php if(Gate::check('share documents')): ?>
+                                                    <?php if(Gate::check('share documents') && $document->LastVersion): ?>
                                                         <a class="avtar avtar-xs btn-link-info text-secondary customModal"
                                                             data-bs-toggle="tooltip" data-size="md"
                                                             data-bs-original-title="<?php echo e(__('Share')); ?>" href="#!"
