@@ -38,13 +38,7 @@
 
                         </h5>
                     </div>
-                    <?php if(Gate::check('create document')): ?>
-                        <div class="col-auto">
-                            <a class="btn btn-secondary customModal" href="#" data-size="lg"
-                                data-url="<?php echo e(route($document_type_route.'.create')); ?>" data-title="<?php echo e(__('Create')); ?> <?php echo e(__($document_type_title)); ?>">
-                                <i class="ti ti-circle-plus align-text-bottom"></i><?php echo e(__('Create')); ?> <?php echo e(__($document_type_title)); ?></a>
-                        </div>
-                    <?php endif; ?>
+                    
                 </div>
             </div>
             <div class="card-body pt-0">

@@ -36,13 +36,13 @@
                             {{ __($document_type_title) }}
                         </h5>
                     </div>
-                    @if (Gate::check('create document'))
+                    {{-- @if (Gate::check('create document'))
                         <div class="col-auto">
                             <a class="btn btn-secondary customModal" href="#" data-size="lg"
                                 data-url="{{ route($document_type_route.'.create') }}" data-title="{{ __('Create') }} {{ __($document_type_title) }}">
                                 <i class="ti ti-circle-plus align-text-bottom"></i>{{ __('Create') }} {{ __($document_type_title) }}</a>
                         </div>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
             <div class="card-body pt-0">

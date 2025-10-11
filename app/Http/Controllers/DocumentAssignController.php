@@ -4,12 +4,57 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DocumentIssue;
+use Carbon\Carbon;
 
 class DocumentAssignController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $assignedDocuments = DocumentIssue::with(['user', 'document', 'issuer'])->whereColumn('quantity', '>', 'returned_quantity')->get();
+        $query = DocumentIssue::with(['user', 'document', 'issuer'])
+                              ->whereColumn('quantity', '>', 'returned_quantity');
+
+        // Filter by Client Name
+        if ($request->filled('client_name')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('first_name', 'like', '%' . $request->client_name . '%')
+                  ->orWhere('last_name', 'like', '%' . $request->client_name . '%');
+            });
+        }
+
+        // Filter by Document Name
+        if ($request->filled('document_name')) {
+            $query->whereHas('document', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->document_name . '%');
+            });
+        }
+
+        // Filter by specific Issue Date
+        if ($request->filled('issue_date')) {
+            $query->whereDate('issue_date', $request->issue_date);
+        }
+        
+        // Filter by specific Due Date
+        if ($request->filled('due_date')) {
+            $query->whereDate('due_date', $request->due_date);
+        }
+
+        // Filter by Due Date Range
+        if ($request->filled('due_date_range')) {
+            switch ($request->due_date_range) {
+                case 'today':
+                    $query->whereDate('due_date', \Carbon\Carbon::today());
+                    break;
+                case 'tomorrow':
+                    $query->whereDate('due_date', \Carbon\Carbon::tomorrow());
+                    break;
+                case 'next_7_days':
+                    $query->whereBetween('due_date', [\Carbon\Carbon::today(), \Carbon\Carbon::today()->addDays(7)]);
+                    break;
+            }
+        }
+
+        $assignedDocuments = $query->get();
+
         return view('assign.index', compact('assignedDocuments'));
     }
 

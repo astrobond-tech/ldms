@@ -22,8 +22,8 @@
             {{Form::date('issue_date', \Carbon\Carbon::now(), array('class'=>'form-control', 'required'=>'required'))}}
         </div>
         <div class="form-group col-md-6">
-            {{Form::label('due_date',__('Return Date'),array('class'=>'form-label'))}}
-            {{Form::date('due_date', null, array('class'=>'form-control'))}}
+            {{Form::label('due_date',__('Due Date'),array('class'=>'form-label'))}}
+            {{Form::date('due_date', null, array('class'=>'form-control', 'required'=>'required'))}}
         </div>
 
         <div class="form-group col-md-6">
@@ -33,12 +33,57 @@
     </div>
 </div>
 <div class="modal-footer">
-    {{Form::submit(__('Assign'),array('class'=>'btn btn-secondary btn-rounded'))}}
+    <div id="validation-feedback" class="text-danger mb-2 w-100" style="text-align: left;"></div>
+    {{Form::submit(__('Assign'),array('class'=>'btn btn-secondary btn-rounded', 'id' => 'assign-submit-btn'))}}
 </div>
 {{ Form::close() }}
 
 <script>
 $(document).ready(function() {
+    let availableCopies = null;
+    let validationFeedback = $('#validation-feedback');
+    let submitButton = $('#assign-submit-btn');
+
+    function validateAssignForm() {
+        let errors = [];
+
+        // 1. Check required fields
+        if (!$('#client_id').val()) {
+            errors.push('Client must be selected.');
+        }
+        if (!$('#document_id').val()) {
+            errors.push('Document must be selected.');
+        }
+        if (!$('input[name="issue_date"]').val()) {
+            errors.push('Issue date is required.');
+        }
+        if (!$('input[name="due_date"]').val()) {
+            errors.push('Due date is required.');
+        }
+
+        // 2. Check quantity
+        let quantity = parseInt($('input[name="quantity"]').val(), 10);
+        if (isNaN(quantity) || quantity < 1) {
+            errors.push('Assign copies must be at least 1.');
+        }
+
+        if (availableCopies !== null && quantity > availableCopies) {
+            errors.push('Assign copies cannot exceed available copies (' + availableCopies + ').');
+        }
+
+        // 3. Update UI
+        if (errors.length > 0) {
+            submitButton.prop('disabled', true);
+            validationFeedback.html('<strong>To enable assign, please fix the following:</strong><br>' + errors.join('<br>'));
+        } else {
+            submitButton.prop('disabled', false);
+            validationFeedback.html('');
+        }
+    }
+
+    // Add event listeners
+    $('#client_id, #document_id, input[name="issue_date"], input[name="due_date"], input[name="quantity"]').on('change keyup select2:select select2:unselect', validateAssignForm);
+
     $('#client_id').select2({
         placeholder: "{{__('Search for a client')}}",
         dropdownParent: $('.modal'),
@@ -82,51 +127,35 @@ $(document).ready(function() {
     }).on('select2:select', function (e) {
         var documentId = e.params.data.id;
         $.ajax({
-            url: '/assign/document/' + documentId, // Using direct url to avoid route issues in JS
+            url: '/assign/document/' + documentId,
             type: 'GET',
             success: function(data) {
                 var detailsHtml = '<h4>{{__("Document Details")}}</h4>';
-                var availableCopies = 0;
                 if(data.essential) {
-                    availableCopies = data.essential.copies_available || 0;
+                    if (data.essential.copies_total !== null) {
+                        availableCopies = data.essential.copies_available || 0;
+                    } else {
+                        availableCopies = null; // Represents infinite copies
+                    }
+
                     detailsHtml += '<p><strong>{{__("Total Copies")}}:</strong> ' + (data.essential.copies_total !== null ? data.essential.copies_total : 'N/A') + '</p>';
-                    detailsHtml += '<p><strong>{{__("Available Copies")}}:</strong> ' + (availableCopies) + '</p>';
-                    if(data.essential.rack) {
-                        detailsHtml += '<p><strong>{{__("Rack")}}:</strong> ' + data.essential.rack + '</p>';
-                    }
-                    if(data.essential.shelf) {
-                        detailsHtml += '<p><strong>{{__("Shelf")}}:</strong> ' + data.essential.shelf + '</p>';
-                    }
-                    if(data.essential.room) {
-                        detailsHtml += '<p><strong>{{__("Room")}}:</strong> ' + data.essential.room + '</p>';
-                    }
-                    if(data.essential.cabinet) {
-                        detailsHtml += '<p><strong>{{__("Cabinet")}}:</strong> ' + data.essential.cabinet + '</p>';
-                    }
+                    detailsHtml += '<p><strong>{{__("Available Copies")}}:</strong> ' + (data.essential.copies_available !== null ? data.essential.copies_available : 'N/A') + '</p>';
+                    if(data.essential.rack) { detailsHtml += '<p><strong>{{__("Rack")}}:</strong> ' + data.essential.rack + '</p>'; }
+                    if(data.essential.shelf) { detailsHtml += '<p><strong>{{__("Shelf")}}:</strong> ' + data.essential.shelf + '</p>'; }
+                    if(data.essential.room) { detailsHtml += '<p><strong>{{__("Room")}}:</strong> ' + data.essential.room + '</p>'; }
+                    if(data.essential.cabinet) { detailsHtml += '<p><strong>{{__("Cabinet")}}:</strong> ' + data.essential.cabinet + '</p>'; }
                 }
                 $('#document_details').html(detailsHtml);
-
-                var quantityInput = $('input[name="quantity"]');
-                var submitButton = $('input[type="submit"]');
-
-                if (data.essential && data.essential.copies_total !== null) {
-                    quantityInput.attr('max', availableCopies);
-                    if(availableCopies <= 0) {
-                        quantityInput.prop('disabled', true);
-                        submitButton.prop('disabled', true);
-                        detailsHtml += '<div class="alert alert-danger mt-2">{{__("No copies available to assign.")}}</div>';
-                        $('#document_details').html(detailsHtml);
-                    } else {
-                        quantityInput.prop('disabled', false);
-                        submitButton.prop('disabled', false);
-                    }
-                } else {
-                    quantityInput.removeAttr('max');
-                    quantityInput.prop('disabled', false);
-                    submitButton.prop('disabled', false);
-                }
+                validateAssignForm();
             }
         });
+    }).on('select2:unselect', function (e) {
+        availableCopies = null;
+        $('#document_details').html('');
+        validateAssignForm();
     });
+
+    // Initial validation check
+    validateAssignForm();
 });
 </script>
