@@ -34,7 +34,7 @@
                                         <div><?php echo e(Form::select('category', $category, null, ['class' => 'form-select'])); ?>
 
                                         </div>
-                                        <div><?php echo e(Form::select('stages', $stages, null, ['class' => 'form-select'])); ?></div>
+                                        
                                         <div><?php echo e(Form::date('created_date', null, ['class' => 'form-control'])); ?>
 
                                         </div>
@@ -78,11 +78,14 @@
                             <thead>
                                 <tr>
                                     <th><?php echo e(__('Name')); ?></th>
-                                    <th><?php echo e(__('Assigned To')); ?></th>
                                     <th><?php echo e(__('Category')); ?></th>
                                     <th><?php echo e(__('Sub Category')); ?></th>
-                                    <th><?php echo e(__('Tags')); ?></th>
-                                    <th><?php echo e(__('Stage')); ?></th>
+                                    <?php if($document_type == 'book' || $document_type == 'document'): ?>
+                                        <th><?php echo e(__('Rack')); ?></th>
+                                        <th><?php echo e(__('Room')); ?></th>
+                                        <th><?php echo e(__('Shelf')); ?></th>
+                                        <th><?php echo e(__('Cabinet')); ?></th>
+                                    <?php endif; ?>
                                     <th><?php echo e(__('Created By')); ?></th>
                                     <th><?php echo e(__('Created At')); ?></th>
                                     <?php if(Gate::check('edit document') ||
@@ -97,20 +100,14 @@
                                 <?php $__currentLoopData = $documents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $document): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr role="row">
                                         <td><?php echo e($document->name); ?></td>
-                                        <td><?php echo e(optional($document->AssignTo)->name); ?></td>
                                         <td><?php echo e(!empty($document->category) ? $document->category->title : '-'); ?></td>
                                         <td><?php echo e(!empty($document->subCategory) ? $document->subCategory->title : '-'); ?></td>
-                                        <td>
-                                            <?php $__currentLoopData = $document->tags(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <?php echo e(!empty( $tag)?$tag->title:'-'); ?>  <br>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </td>
-                                        <td>
-                                            <?php if(!empty($document->StageData)): ?>
-                                                <span class="d-inline badge text-bg-success"
-                                                    style="background-color: <?php echo e(optional($document->StageData)->color); ?> !important"><?php echo e(optional($document->StageData)->title); ?></span>
-                                            <?php endif; ?>
-                                        </td>
+                                        <?php if($document_type == 'book' || $document_type == 'document'): ?>
+                                            <td><?php echo e(optional($document->essential)->rack ?? '-'); ?></td>
+                                            <td><?php echo e(optional($document->essential)->room ?? '-'); ?></td>
+                                            <td><?php echo e(optional($document->essential)->shelf ?? '-'); ?></td>
+                                            <td><?php echo e(optional($document->essential)->cabinet ?? '-'); ?></td>
+                                        <?php endif; ?>
                                         <td><?php echo e(!empty($document->createdBy) ? $document->createdBy->name : ''); ?></td>
                                         <td><?php echo e(dateFormat($document->created_at)); ?></td>
                                         <?php if(Gate::check('edit document') ||

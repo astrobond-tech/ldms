@@ -7,12 +7,7 @@
 
 <div class="modal-body">
     <div class="row">
-        <div class="form-group col-md-6">
-            <?php echo e(Form::label('assign_to',__('Assign To'),array('class'=>'form-label'))); ?>
-
-            <?php echo e(Form::select('assign_to',$client,null,array('class'=>'form-control hidesearch'))); ?>
-
-        </div>
+        
         <div class="form-group  col-md-6">
             <?php echo e(Form::label('name',__('Name'),array('class'=>'form-label'))); ?>
 
@@ -219,4 +214,5 @@
             toggle_fields();
         });
     });
-</script><?php /**PATH /home/khalid/Documents/ldms/resources/views/document/create.blade.php ENDPATH**/ ?>
+</script>
+<?php /**PATH /home/khalid/Documents/ldms/resources/views/document/create.blade.php ENDPATH**/ ?>

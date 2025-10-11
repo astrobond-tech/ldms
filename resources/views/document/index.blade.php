@@ -32,7 +32,7 @@
                                     <div class="d-flex flex-wrap gap-2">
                                         <div>{{ Form::select('category', $category, null, ['class' => 'form-select']) }}
                                         </div>
-                                        <div>{{ Form::select('stages', $stages, null, ['class' => 'form-select']) }}</div>
+                                        {{-- <div>{{ Form::select('stages', $stages, null, ['class' => 'form-select']) }}</div> --}}
                                         <div>{{ Form::date('created_date', null, ['class' => 'form-control']) }}
                                         </div>
                                         <div>
@@ -74,11 +74,14 @@
                             <thead>
                                 <tr>
                                     <th>{{ __('Name') }}</th>
-                                    <th>{{ __('Assigned To') }}</th>
                                     <th>{{ __('Category') }}</th>
                                     <th>{{ __('Sub Category') }}</th>
-                                    <th>{{ __('Tags') }}</th>
-                                    <th>{{ __('Stage') }}</th>
+                                    @if ($document_type == 'book' || $document_type == 'document')
+                                        <th>{{ __('Rack') }}</th>
+                                        <th>{{ __('Room') }}</th>
+                                        <th>{{ __('Shelf') }}</th>
+                                        <th>{{ __('Cabinet') }}</th>
+                                    @endif
                                     <th>{{ __('Created By') }}</th>
                                     <th>{{ __('Created At') }}</th>
                                     @if (Gate::check('edit document') ||
@@ -93,20 +96,14 @@
                                 @foreach ($documents as $document)
                                     <tr role="row">
                                         <td>{{ $document->name }}</td>
-                                        <td>{{ optional($document->AssignTo)->name }}</td>
                                         <td>{{ !empty($document->category) ? $document->category->title : '-' }}</td>
                                         <td>{{ !empty($document->subCategory) ? $document->subCategory->title : '-' }}</td>
-                                        <td>
-                                            @foreach ($document->tags() as $tag)
-                                                {{ !empty( $tag)?$tag->title:'-' }}  <br>
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            @if (!empty($document->StageData))
-                                                <span class="d-inline badge text-bg-success"
-                                                    style="background-color: {{ optional($document->StageData)->color }} !important">{{ optional($document->StageData)->title }}</span>
-                                            @endif
-                                        </td>
+                                        @if ($document_type == 'book' || $document_type == 'document')
+                                            <td>{{ optional($document->essential)->rack ?? '-' }}</td>
+                                            <td>{{ optional($document->essential)->room ?? '-' }}</td>
+                                            <td>{{ optional($document->essential)->shelf ?? '-' }}</td>
+                                            <td>{{ optional($document->essential)->cabinet ?? '-' }}</td>
+                                        @endif
                                         <td>{{ !empty($document->createdBy) ? $document->createdBy->name : '' }}</td>
                                         <td>{{ dateFormat($document->created_at) }}</td>
                                         @if (Gate::check('edit document') ||

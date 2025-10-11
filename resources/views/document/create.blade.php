@@ -6,10 +6,10 @@
 {{Form::open(array('url'=>$document_type_route,'method'=>'post', 'enctype' => "multipart/form-data"))}}
 <div class="modal-body">
     <div class="row">
-        <div class="form-group col-md-6">
+        {{-- <div class="form-group col-md-6">
             {{Form::label('assign_to',__('Assign To'),array('class'=>'form-label'))}}
             {{Form::select('assign_to',$client,null,array('class'=>'form-control hidesearch'))}}
-        </div>
+        </div> --}}
         <div class="form-group  col-md-6">
             {{Form::label('name',__('Name'),array('class'=>'form-label'))}}
             {{Form::text('name',null,array('class'=>'form-control','placeholder'=>__('Enter document name')))}}

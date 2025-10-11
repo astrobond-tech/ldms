@@ -39,7 +39,7 @@ class DocumentController extends Controller
 
             $category = Category::where('parent_id', parentId())->get()->pluck('title', 'id')->prepend(__('Select Category'), '');
             $stages = Stage::where('parent_id', parentId())->get()->pluck('title', 'id')->prepend(__('Select Stage'), '');
-            $documents_query = Document::where('parent_id', '=', parentId())->where('archive', 0);
+            $documents_query = Document::with('essential')->where('parent_id', '=', parentId())->where('archive', 0);
 
             $documents_query->whereHas('essential', function ($q) use ($document_type) {
                 $q->where('document_type', $document_type);
@@ -380,13 +380,12 @@ class DocumentController extends Controller
 
             $assign_doc = shareDocument::where('user_id', \Auth::user()->id)->get()->pluck('document_id');
 
-            $documents_query = Document::where(function ($query) use ($assign_doc) {
-                $query->where('created_by', \Auth::user()->id);
-                if (!$assign_doc->isEmpty()) {
-                    $query->orWhereIn('id', $assign_doc);
-                }
-            });
-
+                    $documents_query = Document::with('essential')->where(function ($query) use ($assign_doc) {
+                        $query->where('created_by', \Auth::user()->id);
+                        if (!$assign_doc->isEmpty()) {
+                            $query->orWhereIn('id', $assign_doc);
+                        }
+                    });
             $documents_query->whereHas('essential', function ($q) use ($document_type) {
                 $q->where('document_type', $document_type);
             });

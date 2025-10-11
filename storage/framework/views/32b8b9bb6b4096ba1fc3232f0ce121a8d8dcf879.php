@@ -1,5 +1,11 @@
+<?php
+    $document_type_title = ucwords(str_replace('_', ' ', $document_type ?? 'document'));
+    $document_type_route = str_replace('_', '-', $document_type ?? 'document');
+?>
+
+
 <?php $__env->startSection('page-title'); ?>
-    <?php echo e(__('Document')); ?>
+    <?php echo e(__($document_type_title)); ?>
 
 <?php $__env->stopSection(); ?>
 
@@ -9,15 +15,15 @@
             <a href="<?php echo e(route('dashboard')); ?>"><?php echo e(__('Dashboard')); ?></a>
         </li>
         <li class="breadcrumb-item active">
-            <a href="#"><?php echo e(__('Document')); ?></a>
+            <a href="#"><?php echo e(__($document_type_title)); ?></a>
         </li>
     </ul>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('card-action-btn'); ?>
     <?php if(Gate::check('create my document')): ?>
-        <a class="btn btn-secondary btn-sm ml-20 customModal" href="#" data-size="md"
-           data-url="<?php echo e(route('document.create')); ?>"
-           data-title="<?php echo e(__('Create Document')); ?>"> <i class="ti-plus mr-5"></i><?php echo e(__('Create Document')); ?></a>
+        <a class="btn btn-secondary btn-sm ml-20 customModal" href="#" data-size="lg"
+           data-url="<?php echo e(route($document_type_route.'.create')); ?>"
+           data-title="<?php echo e(__('Create')); ?> <?php echo e(__($document_type_title)); ?>"> <i class="ti-plus mr-5"></i><?php echo e(__('Create')); ?> <?php echo e(__($document_type_title)); ?></a>
     <?php endif; ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
@@ -28,15 +34,15 @@
                 <div class="row align-items-center g-2">
                     <div class="col">
                         <h5>
-                            <?php echo e(__('Document')); ?>
+                            <?php echo e(__($document_type_title)); ?>
 
                         </h5>
                     </div>
                     <?php if(Gate::check('create document')): ?>
                         <div class="col-auto">
-                            <a class="btn btn-secondary customModal" href="#" data-size="md"
-                                data-url="<?php echo e(route('document.create')); ?>" data-title="<?php echo e(__('Create Document')); ?>">
-                                <i class="ti ti-circle-plus align-text-bottom"></i><?php echo e(__('Create Document')); ?></a>
+                            <a class="btn btn-secondary customModal" href="#" data-size="lg"
+                                data-url="<?php echo e(route($document_type_route.'.create')); ?>" data-title="<?php echo e(__('Create')); ?> <?php echo e(__($document_type_title)); ?>">
+                                <i class="ti ti-circle-plus align-text-bottom"></i><?php echo e(__('Create')); ?> <?php echo e(__($document_type_title)); ?></a>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -49,7 +55,12 @@
                                 <th><?php echo e(__('Name')); ?></th>
                                 <th><?php echo e(__('Category')); ?></th>
                                 <th><?php echo e(__('Sub Category')); ?></th>
-                                <th><?php echo e(__('Tags')); ?></th>
+                                <?php if($document_type == 'book' || $document_type == 'document'): ?>
+                                    <th><?php echo e(__('Rack')); ?></th>
+                                    <th><?php echo e(__('Room')); ?></th>
+                                    <th><?php echo e(__('Shelf')); ?></th>
+                                    <th><?php echo e(__('Cabinet')); ?></th>
+                                <?php endif; ?>
                                 <th><?php echo e(__('Created By')); ?></th>
                                 <th><?php echo e(__('Created At')); ?></th>
                                 <th><?php echo e(__('Expired At')); ?></th>
@@ -70,37 +81,27 @@
                                         <?php echo e(!empty($document->subCategory) ? $document->subCategory->title : '-'); ?>
 
                                     </td>
-                                    <td>
-                                        <?php $__currentLoopData = $document->tags(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <?php echo e(!empty( $tag)?$tag->title:'-'); ?>  <br>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </td>
+                                    <?php if($document_type == 'book' || $document_type == 'document'): ?>
+                                        <td><?php echo e(optional($document->essential)->rack ?? '-'); ?></td>
+                                        <td><?php echo e(optional($document->essential)->room ?? '-'); ?></td>
+                                        <td><?php echo e(optional($document->essential)->shelf ?? '-'); ?></td>
+                                        <td><?php echo e(optional($document->essential)->cabinet ?? '-'); ?></td>
+                                    <?php endif; ?>
                                     <td><?php echo e(!empty($document->createdBy) ? $document->createdBy->name : ''); ?></td>
                                     <td><?php echo e(dateFormat($document->created_at)); ?></td>
                                     <td><?php echo e(dateFormat($document->created_at)); ?></td>
                                     <?php if(Gate::check('edit my document') || Gate::check('delete my document') || Gate::check('show my document')): ?>
                                         <td class="text-right">
                                             <div class="cart-action">
-                                                <?php echo Form::open(['method' => 'DELETE', 'route' => ['document.destroy', encrypt($document->id)]]); ?>
+                                                <?php echo Form::open(['method' => 'DELETE', 'route' => [$document_type_route.'.destroy', encrypt($document->id)]]); ?>
 
                                                 <?php if(Gate::check('show my document')): ?>
                                                     <a class="avtar avtar-xs btn-link-warning text-warning" data-bs-toggle="tooltip"
                                                         data-bs-original-title="<?php echo e(__('Show Details')); ?>"
-                                                        href="<?php echo e(route('document.show', \Illuminate\Support\Facades\Crypt::encrypt($document->id))); ?>">
+                                                        href="<?php echo e(route($document_type_route.'.show', \Illuminate\Support\Facades\Crypt::encrypt($document->id))); ?>">
                                                         <i data-feather="eye"></i></a>
                                                 <?php endif; ?>
-                                                <?php if(Gate::check('edit my document')): ?>
-                                                    <a class="avtar avtar-xs btn-link-secondary text-secondary customModal" data-bs-toggle="tooltip"
-                                                        data-bs-original-title="<?php echo e(__('Edit')); ?>" href="#"
-                                                        data-url="<?php echo e(route('document.edit', encrypt($document->id))); ?>"
-                                                        data-title="<?php echo e(__('Edit Support')); ?>"> <i
-                                                            data-feather="edit"></i></a>
-                                                <?php endif; ?>
-                                                <?php if(Gate::check('delete my document')): ?>
-                                                    <a class=" avtar avtar-xs btn-link-danger text-danger confirm_dialog" data-bs-toggle="tooltip"
-                                                        data-bs-original-title="<?php echo e(__('Detete')); ?>" href="#"> <i
-                                                            data-feather="trash-2"></i></a>
-                                                <?php endif; ?>
+                                                
                                                 <?php echo Form::close(); ?>
 
                                             </div>
@@ -116,6 +117,5 @@
     </div>
 </div>
 <?php $__env->stopSection(); ?>
-
 
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/khalid/Documents/ldms/resources/views/document/own.blade.php ENDPATH**/ ?>
