@@ -178,6 +178,17 @@
                             </ul>
                         </li>
                     <?php endif; ?>
+
+                    
+                    <?php if(Gate::check('manage document')): ?>
+                        <li class="pc-item <?php echo e(str_starts_with($routeName, 'assign.') ? 'active' : ''); ?>">
+                            <a href="<?php echo e(route('assign.index')); ?>" class="pc-link">
+                                <span class="pc-micon"><i data-feather="check-square"></i></span>
+                                <span class="pc-mtext"><?php echo e(__('Assign')); ?></span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+
                     <?php if(Gate::check('manage reminder')): ?>
                         <li class="pc-item <?php echo e(Request::route()->getName() == 'reminder.index' ? 'active' : ''); ?>">
                             <a href="<?php echo e(route('reminder.index')); ?>" class="pc-link">

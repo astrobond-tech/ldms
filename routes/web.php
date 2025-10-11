@@ -25,6 +25,7 @@ use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\StageController;
+use App\Http\Controllers\DocumentAssignController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,22 @@ use App\Http\Controllers\StageController;
 */
 
 require __DIR__ . '/auth.php';
+
+Route::group([
+    'middleware' => [
+        'auth',
+        'XSS',
+    ],
+], function(){
+    Route::get('assign', [DocumentAssignController::class, 'index'])->name('assign.index');
+    Route::get('assign/create', [DocumentAssignController::class, 'create'])->name('assign.create');
+    Route::post('assign', [DocumentAssignController::class, 'store'])->name('assign.store');
+    Route::get('assign/{id}/return', [DocumentAssignController::class, 'returnModal'])->name('assign.return');
+    Route::post('assign/{id}/return', [DocumentAssignController::class, 'returnStore'])->name('assign.return.store');
+    Route::get('assign/search-clients', [DocumentAssignController::class, 'searchClients'])->name('assign.search.clients');
+    Route::get('assign/search-documents', [DocumentAssignController::class, 'searchDocuments'])->name('assign.search.documents');
+    Route::get('assign/document/{id}', [DocumentAssignController::class, 'getDocumentDetails'])->name('assign.document.details');
+});
 
 Route::get('/', [HomeController::class, 'index'])->middleware(
     [

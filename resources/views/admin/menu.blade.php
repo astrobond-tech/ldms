@@ -178,6 +178,17 @@
                             </ul>
                         </li>
                     @endif
+
+                    {{-- Assign Menu --}}
+                    @if (Gate::check('manage document'))
+                        <li class="pc-item {{ str_starts_with($routeName, 'assign.') ? 'active' : '' }}">
+                            <a href="{{ route('assign.index') }}" class="pc-link">
+                                <span class="pc-micon"><i data-feather="check-square"></i></span>
+                                <span class="pc-mtext">{{ __('Assign') }}</span>
+                            </a>
+                        </li>
+                    @endif
+
                     @if (Gate::check('manage reminder'))
                         <li class="pc-item {{ Request::route()->getName() == 'reminder.index' ? 'active' : '' }}">
                             <a href="{{ route('reminder.index') }}" class="pc-link">
