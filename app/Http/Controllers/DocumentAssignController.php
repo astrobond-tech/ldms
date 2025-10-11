@@ -32,7 +32,7 @@ class DocumentAssignController extends Controller
         if ($request->filled('issue_date')) {
             $query->whereDate('issue_date', $request->issue_date);
         }
-        
+
         // Filter by specific Due Date
         if ($request->filled('due_date')) {
             $query->whereDate('due_date', $request->due_date);
@@ -64,50 +64,79 @@ class DocumentAssignController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validator = \Validator::make(
-            $request->all(),
-            [
-                'client_id' => 'required|exists:users,id',
-                'document_id' => 'required|exists:documents,id',
-                'quantity' => 'required|integer|min:1',
-                'issue_date' => 'required|date',
-                'due_date' => 'nullable|date|after_or_equal:issue_date',
-            ]
-        );
+{
+    // More thorough validation
+    $validator = \Validator::make(
+        $request->all(),
+        [
+            'client_id' => 'required|integer|exists:users,id',
+            'document_id' => 'required|integer|exists:documents,id',
+            'quantity' => 'required|integer|min:1',
+            'issue_date' => 'required|date_format:Y-m-d',
+            'due_date' => 'required|date_format:Y-m-d|after_or_equal:issue_date',
+        ],
+        [
+            'client_id.required' => __('Client must be selected.'),
+            'client_id.exists' => __('Selected client does not exist.'),
+            'document_id.required' => __('Document must be selected.'),
+            'document_id.exists' => __('Selected document does not exist.'),
+            'quantity.required' => __('Quantity is required.'),
+            'quantity.min' => __('Quantity must be at least 1.'),
+            'issue_date.required' => __('Issue date is required.'),
+            'issue_date.date_format' => __('Issue date format is invalid.'),
+            'due_date.required' => __('Due date is required.'),
+            'due_date.date_format' => __('Due date format is invalid.'),
+            'due_date.after_or_equal' => __('Due date must be after or equal to issue date.'),
+        ]
+    );
 
-        if ($validator->fails()) {
-            $messages = $validator->getMessageBag();
-            return redirect()->back()->with('error', $messages->first());
+    if ($validator->fails()) {
+        $messages = $validator->getMessageBag();
+        return redirect()->back()->withInput()->with('error', $messages->first());
+    }
+
+    try {
+        $document = \App\Models\Document::with('essential')->find($request->document_id);
+
+        if (!$document) {
+            return redirect()->back()->with('error', __('Document not found.'));
         }
 
-        $document = \App\Models\Document::with('essential')->find($request->document_id);
         $essential = $document->essential;
 
+        // Check available copies
         if ($essential && $essential->copies_total !== null) {
-            if ($essential->copies_available < $request->quantity) {
-                return redirect()->back()->with('error', __('Not enough copies available to assign.'));
+            $availableCopies = $essential->copies_available ?? 0;
+            if ($availableCopies < $request->quantity) {
+                return redirect()->back()->withInput()->with('error', __('Not enough copies available to assign. Available: ' . $availableCopies));
             }
         }
 
+        // Create new issue record
         $issue = new DocumentIssue();
         $issue->document_id = $request->document_id;
         $issue->essential_id = $essential ? $essential->id : null;
         $issue->user_id = $request->client_id;
         $issue->issued_by = \Auth::id();
-        $issue->issue_date = $request->issue_date;
-        $issue->due_date = $request->due_date;
+        $issue->issue_date = \Carbon\Carbon::createFromFormat('Y-m-d', $request->issue_date);
+        $issue->due_date = \Carbon\Carbon::createFromFormat('Y-m-d', $request->due_date);
         $issue->quantity = $request->quantity;
+        $issue->returned_quantity = 0;
         $issue->status = 'issued';
         $issue->save();
 
+        // Update available copies
         if ($essential && $essential->copies_total !== null) {
             $essential->copies_available -= $request->quantity;
             $essential->save();
         }
 
         return redirect()->route('assign.index')->with('success', __('Document assigned successfully.'));
+    } catch (\Exception $e) {
+        \Log::error('Document assignment error: ' . $e->getMessage());
+        return redirect()->back()->withInput()->with('error', __('An error occurred while assigning the document. Please try again.'));
     }
+}
 
     public function returnModal($id)
     {
