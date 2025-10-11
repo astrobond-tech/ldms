@@ -86,25 +86,7 @@
 <?php $__env->stopPush(); ?>
 <?php $__env->startSection('content'); ?>
     <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="card" style="cursor: pointer;" onclick="window.location='<?php echo e(route('users.index')); ?>'">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                            <div class="avtar bg-light-secondary">
-                                <i class="ti ti-users f-24"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <p class="mb-1"><?php echo e(__('Total Users')); ?></p>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0"><?php echo e($result['totalUser']); ?></h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <div class="col-lg-3 col-md-6">
             <div class="card" style="cursor: pointer;" onclick="window.location='<?php echo e(route('document.index')); ?>'">
                 <div class="card-body">
@@ -115,7 +97,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <p class="mb-1"><?php echo e(__('Total Document')); ?></p>
+                            <p class="mb-1"><?php echo e(__('Document')); ?></p>
                             <div class="d-flex align-items-center justify-content-between">
                                 <h4 class="mb-0"><?php echo e($result['totalDocument']); ?></h4>
                             </div>
@@ -124,8 +106,9 @@
                 </div>
             </div>
         </div>
+
         <div class="col-lg-3 col-md-6">
-            <div class="card" style="cursor: pointer;" onclick="window.location='<?php echo e(route('document.index')); ?>?created_date=<?php echo e(now()->format('Y-m-d')); ?>'">
+            <div class="card" style="cursor: pointer;" onclick="window.location='<?php echo e(route('book.index')); ?>'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -134,76 +117,39 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <p class="mb-1"><?php echo e(__('Today Document')); ?></p>
+                            <p class="mb-1"><?php echo e(__('Book')); ?></p>
                             <div class="d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0"><?php echo e($result['todayDocument']); ?></h4>
+                                <h4 class="mb-0"><?php echo e($result['totalBook']); ?></h4>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="card" style="cursor: pointer;" onclick="window.location='<?php echo e(route('category.index')); ?>'">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                            <div class="avtar bg-light-primary">
-                                <i class="ti ti-history f-24"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <p class="mb-1"><?php echo e(__('Total Category')); ?></p>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0"><?php echo e($result['totalCategory']); ?></h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="card" style="cursor: pointer;" onclick="window.location='<?php echo e(route('reminder.index')); ?>'">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                            <div class="avtar bg-light-danger">
-                                <i class="ti ti-credit-card f-24"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <p class="mb-1"><?php echo e(__('Total Reminder')); ?></p>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0"><?php echo e($result['totalReminder']); ?>
 
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="col-lg-3 col-md-6">
-            <div class="card"  >
+            <div class="card" style="cursor: pointer;" onclick="window.location='<?php echo e(route('paper-cutting.index')); ?>'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
-                            <div class="avtar bg-light-danger">
-                                <i class="ti ti-credit-card f-24"></i>
+                            <div class="avtar bg-light-warning">
+                                <i class="ti ti-package f-24"></i>
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <p class="mb-1"><?php echo e(__('Today Reminder')); ?></p>
+                            <p class="mb-1"><?php echo e(__('Paper Cutting')); ?></p>
                             <div class="d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0"><?php echo e($result['todayReminder']); ?>
-
-                                </h4>
+                                <h4 class="mb-0"><?php echo e($result['totalPaperCutting']); ?></h4>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        
+        
+        
         <div class="col-lg-3 col-md-6">
             <div class="card" style="cursor: pointer;" onclick="window.location='<?php echo e(route('contact.index')); ?>'">
                 <div class="card-body">

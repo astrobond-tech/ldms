@@ -86,9 +86,11 @@ $(document).ready(function() {
             type: 'GET',
             success: function(data) {
                 var detailsHtml = '<h4>{{__("Document Details")}}</h4>';
+                var availableCopies = 0;
                 if(data.essential) {
+                    availableCopies = data.essential.copies_available || 0;
                     detailsHtml += '<p><strong>{{__("Total Copies")}}:</strong> ' + (data.essential.copies_total !== null ? data.essential.copies_total : 'N/A') + '</p>';
-                    detailsHtml += '<p><strong>{{__("Available Copies")}}:</strong> ' + (data.essential.copies_available !== null ? data.essential.copies_available : 'N/A') + '</p>';
+                    detailsHtml += '<p><strong>{{__("Available Copies")}}:</strong> ' + (availableCopies) + '</p>';
                     if(data.essential.rack) {
                         detailsHtml += '<p><strong>{{__("Rack")}}:</strong> ' + data.essential.rack + '</p>';
                     }
@@ -103,6 +105,26 @@ $(document).ready(function() {
                     }
                 }
                 $('#document_details').html(detailsHtml);
+
+                var quantityInput = $('input[name="quantity"]');
+                var submitButton = $('input[type="submit"]');
+
+                if (data.essential && data.essential.copies_total !== null) {
+                    quantityInput.attr('max', availableCopies);
+                    if(availableCopies <= 0) {
+                        quantityInput.prop('disabled', true);
+                        submitButton.prop('disabled', true);
+                        detailsHtml += '<div class="alert alert-danger mt-2">{{__("No copies available to assign.")}}</div>';
+                        $('#document_details').html(detailsHtml);
+                    } else {
+                        quantityInput.prop('disabled', false);
+                        submitButton.prop('disabled', false);
+                    }
+                } else {
+                    quantityInput.removeAttr('max');
+                    quantityInput.prop('disabled', false);
+                    submitButton.prop('disabled', false);
+                }
             }
         });
     });

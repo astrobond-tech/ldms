@@ -140,6 +140,7 @@ class DocumentAssignController extends Controller
     {
         $search = $request->input('search');
         $documents = \App\Models\Document::with('essential')
+            ->where('archive', 0)
             ->where(function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%");

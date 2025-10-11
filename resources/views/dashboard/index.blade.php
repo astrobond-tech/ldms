@@ -137,7 +137,7 @@
                         <div class="flex-grow-1 ms-3">
                             <p class="mb-1">{{ __('Book') }}</p>
                             <div class="d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0">{{ $result['totalDocument'] }}</h4>
+                                <h4 class="mb-0">{{ $result['totalBook'] }}</h4>
                             </div>
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                         <div class="flex-grow-1 ms-3">
                             <p class="mb-1">{{ __('Paper Cutting') }}</p>
                             <div class="d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0">{{ $result['totalDocument'] }}</h4>
+                                <h4 class="mb-0">{{ $result['totalPaperCutting'] }}</h4>
                             </div>
                         </div>
                     </div>

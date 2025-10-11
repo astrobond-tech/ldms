@@ -39,7 +39,9 @@ class HomeController extends Controller
                 return view('dashboard.super_admin', compact('result'));
             } else {
                 $result['totalUser'] = User::where('parent_id', parentId())->count();
-                $result['totalDocument'] = Document::where('parent_id', parentId())->count();
+                $result['totalDocument'] = Document::where('parent_id', parentId())->whereHas('essential', function($q){ $q->where('document_type', 'document'); })->count();
+                $result['totalBook'] = Document::where('parent_id', parentId())->whereHas('essential', function($q){ $q->where('document_type', 'book'); })->count();
+                $result['totalPaperCutting'] = Document::where('parent_id', parentId())->whereHas('essential', function($q){ $q->where('document_type', 'paper_cutting'); })->count();
                 $result['todayDocument'] = Document::whereDate('created_at', Carbon::today())->where('parent_id', parentId())->count();
                 $result['totalCategory'] = Category::where('parent_id', parentId())->count();
                 $result['totalReminder'] = Reminder::where('parent_id', parentId())->count();
