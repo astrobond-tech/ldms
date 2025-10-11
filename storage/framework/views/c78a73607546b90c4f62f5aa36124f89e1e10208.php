@@ -48,7 +48,7 @@
                                         </div>
                                         <?php if(Gate::check('archive document')): ?>
                                             <div>
-                                                <a href="<?php echo e(route($document_type_route.'.archive')); ?>" class="btn btn-secondary">
+                                                <a href="<?php echo e(route($document_type_route.'.archive.list')); ?>" class="btn btn-secondary">
                                                     <i class="ti ti-archive"></i> </a>
                                             </div>
                                         <?php endif; ?>
@@ -119,7 +119,7 @@
                                                 Gate::check('share documents')): ?>
                                             <td class="text-right">
                                                 <div class="cart-action">
-                                                    <?php echo Form::open(['method' => 'get', 'route' => ['archive', encrypt($document->id)], 'class' => 'd-inline']); ?>
+                                                    <?php echo Form::open(['method' => 'get', 'route' => [$document_type_route.'.archive', encrypt($document->id)], 'class' => 'd-inline']); ?>
 
                                                     <?php if(Gate::check('archive document')): ?>
                                                         <a class="avtar avtar-xs btn-link-danger text-danger confirm_dialog"
@@ -143,7 +143,7 @@
                                                         <a class="avtar avtar-xs btn-link-warning text-warning"
                                                             data-bs-toggle="tooltip"
                                                             data-bs-original-title="<?php echo e(__('Show Details')); ?>"
-                                                            href="<?php echo e(route('document.show', \Illuminate\Support\Facades\Crypt::encrypt($document->id))); ?>">
+                                                            href="<?php echo e(route($document_type_route.'.show', \Illuminate\Support\Facades\Crypt::encrypt($document->id))); ?>">
                                                             <i data-feather="eye"></i></a>
                                                     <?php endif; ?>
                                                     <?php if(Gate::check('edit document')): ?>

@@ -1,5 +1,11 @@
+<?php
+    $document_type_title = ucwords(str_replace('_', ' ', $document_type ?? 'document'));
+    $document_type_route = str_replace('_', '-', $document_type ?? 'document');
+?>
+
+
 <?php $__env->startSection('page-title'); ?>
-    <?php echo e(__('Document Archive')); ?>
+    <?php echo e(__($document_type_title . ' Archive')); ?>
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('breadcrumb'); ?>
@@ -7,7 +13,7 @@
         <a href="<?php echo e(route('dashboard')); ?>"><?php echo e(__('Dashboard')); ?></a>
     </li>
     <li class="breadcrumb-item" aria-current="page">
-        <a href="<?php echo e(route('document.index')); ?>"><?php echo e(__('Document')); ?></a>
+        <a href="<?php echo e(route($document_type_route.'.index')); ?>"><?php echo e(__($document_type_title)); ?></a>
     </li>
     <li class="breadcrumb-item" aria-current="page">
         <a href="#"><?php echo e(__('Archive')); ?></a>
@@ -21,7 +27,7 @@
                 <div class="card-header">
                     <div class="row align-items-center g-2 flex-wrap">
                         <div class="col-12 col-md">
-                            <h5><?php echo e(__('Document')); ?></h5>
+                            <h5><?php echo e(__($document_type_title)); ?></h5>
                         </div>
 
                         <?php if(Gate::check('create document')): ?>
@@ -40,22 +46,22 @@
                                                 <i class="ti ti-search align-text-bottom"></i> </button>
                                         </div>
                                         <div>
-                                            <a href="<?php echo e(route('document.archive')); ?>" class="btn btn-secondary">
+                                            <a href="<?php echo e(route($document_type_route.'.archive.list')); ?>" class="btn btn-secondary">
                                                 <i class="ti ti-refresh align-text-bottom"></i> </a>
                                         </div>
                                         <?php if(Gate::check('archive document')): ?>
                                             <div>
-                                                <a href="<?php echo e(route('document.index')); ?>" class="btn btn-secondary">
-                                                    <i class="ti ti-archive"></i> </a>
+                                                <a href="<?php echo e(route($document_type_route.'.index')); ?>" class="btn btn-secondary">
+                                                    <i class="ti ti-arrow-back-up"></i> </a>
                                             </div>
                                         <?php endif; ?>
                                         <?php if(Gate::check('create document')): ?>
                                             <div>
                                                 <a class="btn btn-secondary customModal" href="#!" data-size="lg"
-                                                    data-url="<?php echo e(route('document.create')); ?>"
-                                                    data-title="<?php echo e(__('Create Document')); ?>">
+                                                    data-url="<?php echo e(route($document_type_route.'.create')); ?>"
+                                                    data-title="<?php echo e(__('Create ') . __($document_type_title)); ?>">
                                                     <i class="ti ti-circle-plus align-text-bottom"></i>
-                                                    <?php echo e(__('Create Document')); ?>
+                                                    <?php echo e(__('Create ') . __($document_type_title)); ?>
 
                                                 </a>
                                             </div>
@@ -112,7 +118,7 @@
                                             Gate::check('archive document')): ?>
                                             <td class="text-right">
                                                 <div class="cart-action">
-                                                    <?php echo Form::open(['method' => 'get', 'route' => ['unarchive', encrypt($document->id)], 'class' => 'd-inline']); ?>
+                                                    <?php echo Form::open(['method' => 'get', 'route' => [$document_type_route.'.unarchive', encrypt($document->id)], 'class' => 'd-inline']); ?>
 
                                                     <?php if(Gate::check('archive document')): ?>
                                                         <a class="avtar avtar-xs btn-link-danger text-danger confirm_dialog"
@@ -120,7 +126,7 @@
                                                             data-dialog-text = "<?php echo e(__('Do you want to proceed?')); ?>"
                                                             data-bs-toggle="tooltip"
                                                             data-bs-original-title="<?php echo e(__('unarchived')); ?>" href="#!"> <i
-                                                                class="fas fa-archive" style="font-size: 20px"></i></a>
+                                                                class="fas fa-arrow-up" style="font-size: 20px"></i></a>
                                                     <?php endif; ?>
                                                     <?php echo Form::close(); ?>
 
@@ -148,5 +154,4 @@
         </div>
     </div>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/khalid/Documents/ldms/resources/views/document/archive.blade.php ENDPATH**/ ?>

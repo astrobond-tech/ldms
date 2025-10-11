@@ -38,7 +38,7 @@
             {{Form::label('description',__('Description'),array('class'=>'form-label'))}}
             {{Form::textarea('description',null,array('class'=>'form-control','rows'=>3))}}
         </div>
-        {{Form::hidden('document_type', $document_type, array('id'=>'document_type'))}}
+
     </div>
     <div class="row" id="book_fields" style="display: none;">
         <div class="form-group col-md-6">

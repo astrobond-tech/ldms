@@ -1,6 +1,11 @@
+@php
+    $document_type_title = ucwords(str_replace('_', ' ', $document_type ?? 'document'));
+    $document_type_route = str_replace('_', '-', $document_type ?? 'document');
+@endphp
+
 @extends('layouts.app')
 @section('page-title')
-    {{__('Document Details')}}
+    {{__($document_type_title . ' Details')}}
 @endsection
 
 @section('breadcrumb')
@@ -9,7 +14,7 @@
             <a href="{{route('dashboard')}}">{{__('Dashboard')}}</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{route('document.index')}}">{{__('Document')}}</a>
+            <a href="{{route($document_type_route.'.index')}}">{{__($document_type_title)}}</a>
         </li>
         <li class="breadcrumb-item active">
             <a href="#">{{__('Details')}}</a>
@@ -44,10 +49,10 @@
                                                     href="{{ !empty($latestVersion->document) ? fetch_file($latestVersion->document,'upload/document/') : '#' }}" download><i
                                                         data-feather="download"> </i></a>
                                             @endif
-                                            @if (Gate::check('preview document'))
+                                            @if (Gate::check('edit document'))
                                                 <a class="btn btn-secondary customModal" data-bs-toggle="tooltip"
                                                     data-bs-original-title="{{ __('Edit') }}" href="#"
-                                                    data-url="{{ route('document.edit', encrypt($document->id)) }}"
+                                                    data-url="{{ route($document_type_route.'.edit', encrypt($document->id)) }}"
                                                     data-title="{{ __('Edit Support') }}"> <i
                                                         data-feather="edit"></i></a>
                                             @endif
@@ -60,7 +65,7 @@
                                             <table class="table table-borderless">
                                                 <tbody>
                                                     <tr>
-                                                        <td class="text-muted py-1"><b>{{ __('Document Name') }}</b></td>
+                                                        <td class="text-muted py-1"><b>{{ __($document_type_title . ' Name') }}</b></td>
                                                         <td class="py-1">{{ $document->name }}</td>
                                                     </tr>
                                                     <tr>
@@ -110,10 +115,7 @@
                                     <div class="col-md-6">
                                         <table class="table table-borderless">
                                             <tbody>
-                                                <tr>
-                                                    <td class="text-muted py-1"><b>{{ __('Document Type') }}</b></td>
-                                                    <td class="py-1">{{ optional($document->essential)->document_type }}</td>
-                                                </tr>
+
                                                 <tr>
                                                     <td class="text-muted py-1"><b>{{ __('Total Copies') }}</b></td>
                                                     <td class="py-1">{{ optional($document->essential)->copies_total }}</td>
@@ -199,4 +201,3 @@
     </div>
 </div>
 @endsection
-

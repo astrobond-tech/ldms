@@ -45,7 +45,7 @@
                                         </div>
                                         @if (Gate::check('archive document'))
                                             <div>
-                                                <a href="{{ route($document_type_route.'.archive') }}" class="btn btn-secondary">
+                                                <a href="{{ route($document_type_route.'.archive.list') }}" class="btn btn-secondary">
                                                     <i class="ti ti-archive"></i> </a>
                                             </div>
                                         @endif
@@ -115,7 +115,7 @@
                                                 Gate::check('share documents'))
                                             <td class="text-right">
                                                 <div class="cart-action">
-                                                    {!! Form::open(['method' => 'get', 'route' => ['archive', encrypt($document->id)], 'class' => 'd-inline']) !!}
+                                                    {!! Form::open(['method' => 'get', 'route' => [$document_type_route.'.archive', encrypt($document->id)], 'class' => 'd-inline']) !!}
                                                     @if (Gate::check('archive document'))
                                                         <a class="avtar avtar-xs btn-link-danger text-danger confirm_dialog"
                                                             data-dialog-title = "{{ __('Are you sure you want to archive this record ?') }}"
@@ -137,7 +137,7 @@
                                                         <a class="avtar avtar-xs btn-link-warning text-warning"
                                                             data-bs-toggle="tooltip"
                                                             data-bs-original-title="{{ __('Show Details') }}"
-                                                            href="{{ route('document.show', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}">
+                                                            href="{{ route($document_type_route.'.show', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}">
                                                             <i data-feather="eye"></i></a>
                                                     @endif
                                                     @if (Gate::check('edit document'))

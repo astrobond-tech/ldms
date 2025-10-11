@@ -303,10 +303,10 @@ Route::group(
         Route::get('logged/{id}/history/show', [DocumentController::class, 'loggedHistoryShow'])->name('logged.history.show');
         Route::delete('logged/{id}/history', [DocumentController::class, 'loggedHistoryDestroy'])->name('logged.history.destroy');
         Route::get('document/{id}/Sharelink', [DocumentController::class, 'Sharelink'])->name('document.Sharelink');
-        Route::get('document-GenerateSharelink', [DocumentController::class, 'GenerateSharelink'])->name('generate.shareable.link');
-        Route::get('document/{id}/archive', [DocumentController::class, 'archive'])->name('archive');
-        Route::get('document/{id}/unarchive', [DocumentController::class, 'unarchive'])->name('unarchive');
-        Route::get('document-archive', [DocumentController::class, 'documentArchive'])->name('document.archive');
+        Route::get('document-GenerateSharelink', [DocumentController::class, 'GenerateSharelink'])->name('document.generate.shareable.link');
+        Route::get('document/{id}/archive', [DocumentController::class, 'archive'])->name('document.archive');
+        Route::get('document/{id}/unarchive', [DocumentController::class, 'unarchive'])->name('document.unarchive');
+        Route::get('document-archive', [DocumentController::class, 'documentArchive'])->name('document.archive.list');
     }
 );
 
@@ -318,26 +318,26 @@ Route::group(
         ],
     ],
     function () {
-        Route::get('book/history', [DocumentController::class, 'history'])->name('document.history');
+        Route::get('book/history', [DocumentController::class, 'history'])->name('book.history');
         Route::resource('book', DocumentController::class);
         Route::get('my-book', [DocumentController::class, 'myDocument'])->name('book.my-document');
-        Route::get('book/{id}/comment', [DocumentController::class, 'comment'])->name('document.comment');
-        Route::post('book/{id}/comment', [DocumentController::class, 'commentData'])->name('document.comment');
-        Route::get('book/{id}/reminder', [DocumentController::class, 'reminder'])->name('document.reminder');
-        Route::get('book/{id}/add-reminder', [DocumentController::class, 'addReminder'])->name('document.add.reminder');
-        Route::get('book/{id}/version-history', [DocumentController::class, 'versionHistory'])->name('document.version.history');
-        Route::post('book/{id}/version-history', [DocumentController::class, 'newVersion'])->name('document.new.version');
-        Route::get('book/{id}/share', [DocumentController::class, 'shareDocument'])->name('document.share');
-        Route::post('book/{id}/share', [DocumentController::class, 'shareDocumentData'])->name('document.share');
-        Route::get('book/{id}/add-share', [DocumentController::class, 'addshareDocumentData'])->name('document.add.share');
-        Route::delete('book/{id}/share/destroy', [DocumentController::class, 'shareDocumentDelete'])->name('document.share.destroy');
-        Route::get('book/{id}/send-email', [DocumentController::class, 'sendEmail'])->name('document.send.email');
-        Route::post('book/{id}/send-email', [DocumentController::class, 'sendEmailData'])->name('document.send.email');
-        Route::get('book/{id}/Sharelink', [DocumentController::class, 'Sharelink'])->name('document.Sharelink');
-        Route::get('book-GenerateSharelink', [DocumentController::class, 'GenerateSharelink'])->name('generate.shareable.link');
-        Route::get('book/{id}/archive', [DocumentController::class, 'archive'])->name('archive');
-        Route::get('book/{id}/unarchive', [DocumentController::class, 'unarchive'])->name('unarchive');
-        Route::get('book-archive', [DocumentController::class, 'documentArchive'])->name('book.archive');
+        Route::get('book/{id}/comment', [DocumentController::class, 'comment'])->name('book.comment');
+        Route::post('book/{id}/comment', [DocumentController::class, 'commentData'])->name('book.comment');
+        Route::get('book/{id}/reminder', [DocumentController::class, 'reminder'])->name('book.reminder');
+        Route::get('book/{id}/add-reminder', [DocumentController::class, 'addReminder'])->name('book.add.reminder');
+        Route::get('book/{id}/version-history', [DocumentController::class, 'versionHistory'])->name('book.version.history');
+        Route::post('book/{id}/version-history', [DocumentController::class, 'newVersion'])->name('book.new.version');
+        Route::get('book/{id}/share', [DocumentController::class, 'shareDocument'])->name('book.share');
+        Route::post('book/{id}/share', [DocumentController::class, 'shareDocumentData'])->name('book.share');
+        Route::get('book/{id}/add-share', [DocumentController::class, 'addshareDocumentData'])->name('book.add.share');
+        Route::delete('book/{id}/share/destroy', [DocumentController::class, 'shareDocumentDelete'])->name('book.share.destroy');
+        Route::get('book/{id}/send-email', [DocumentController::class, 'sendEmail'])->name('book.send.email');
+        Route::post('book/{id}/send-email', [DocumentController::class, 'sendEmailData'])->name('book.send.email');
+        Route::get('book/{id}/Sharelink', [DocumentController::class, 'Sharelink'])->name('book.Sharelink');
+        Route::get('book-GenerateSharelink', [DocumentController::class, 'GenerateSharelink'])->name('book.generate.shareable.link');
+        Route::get('book/{id}/archive', [DocumentController::class, 'archive'])->name('book.archive');
+        Route::get('book/{id}/unarchive', [DocumentController::class, 'unarchive'])->name('book.unarchive');
+        Route::get('book-archive', [DocumentController::class, 'documentArchive'])->name('book.archive.list');
     }
 );
 
@@ -352,7 +352,23 @@ Route::group(
     function () {
         Route::resource('paper-cutting', DocumentController::class);
         Route::get('my-paper-cutting', [DocumentController::class, 'myDocument'])->name('paper-cutting.my-document');
-        Route::get('paper-cutting-archive', [DocumentController::class, 'documentArchive'])->name('paper-cutting.archive');
+        Route::get('paper-cutting/{id}/archive', [DocumentController::class, 'archive'])->name('paper-cutting.archive');
+        Route::get('paper-cutting/{id}/unarchive', [DocumentController::class, 'unarchive'])->name('paper-cutting.unarchive');
+        Route::get('paper-cutting-archive', [DocumentController::class, 'documentArchive'])->name('paper-cutting.archive.list');
+        Route::get('paper-cutting/{id}/comment', [DocumentController::class, 'comment'])->name('paper-cutting.comment');
+        Route::post('paper-cutting/{id}/comment', [DocumentController::class, 'commentData'])->name('paper-cutting.comment');
+        Route::get('paper-cutting/{id}/reminder', [DocumentController::class, 'reminder'])->name('paper-cutting.reminder');
+        Route::get('paper-cutting/{id}/add-reminder', [DocumentController::class, 'addReminder'])->name('paper-cutting.add.reminder');
+        Route::get('paper-cutting/{id}/version-history', [DocumentController::class, 'versionHistory'])->name('paper-cutting.version.history');
+        Route::post('paper-cutting/{id}/version-history', [DocumentController::class, 'newVersion'])->name('paper-cutting.new.version');
+        Route::get('paper-cutting/{id}/share', [DocumentController::class, 'shareDocument'])->name('paper-cutting.share');
+        Route::post('paper-cutting/{id}/share', [DocumentController::class, 'shareDocumentData'])->name('paper-cutting.share');
+        Route::get('paper-cutting/{id}/add-share', [DocumentController::class, 'addshareDocumentData'])->name('paper-cutting.add.share');
+        Route::delete('paper-cutting/{id}/share/destroy', [DocumentController::class, 'shareDocumentDelete'])->name('paper-cutting.share.destroy');
+        Route::get('paper-cutting/{id}/send-email', [DocumentController::class, 'sendEmail'])->name('paper-cutting.send.email');
+        Route::post('paper-cutting/{id}/send-email', [DocumentController::class, 'sendEmailData'])->name('paper-cutting.send.email');
+        Route::get('paper-cutting/{id}/Sharelink', [DocumentController::class, 'Sharelink'])->name('paper-cutting.Sharelink');
+        Route::get('paper-cutting-GenerateSharelink', [DocumentController::class, 'GenerateSharelink'])->name('paper-cutting.generate.shareable.link');
     }
 );
 

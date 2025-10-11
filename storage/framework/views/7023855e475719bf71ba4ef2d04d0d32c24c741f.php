@@ -198,7 +198,7 @@
                         <li class="pc-item <?php echo e(Request::route()->getName() == 'document.history' ? 'active' : ''); ?>">
                             <a href="<?php echo e(route('document.history')); ?>" class="pc-link">
                                 <span class="pc-micon"><i data-feather="wind"></i></span>
-                                <span class="pc-mtext"><?php echo e(__('Document History')); ?></span>
+                                <span class="pc-mtext"><?php echo e(__('History')); ?></span>
                             </a>
                         </li>
                     <?php endif; ?>

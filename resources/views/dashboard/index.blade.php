@@ -87,7 +87,7 @@
 @section('content')
     <div class="row">
         <div class="col-lg-3 col-md-6">
-            <div class="card">
+            <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('users.index') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -106,7 +106,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="card">
+            <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('document.index') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -125,7 +125,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="card">
+            <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('document.index') }}?created_date={{ now()->format('Y-m-d') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -144,7 +144,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="card">
+            <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('category.index') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -163,7 +163,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="card">
+            <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('reminder.index') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -183,7 +183,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="card">
+            <div class="card"  >
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -203,7 +203,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="card">
+            <div class="card" style="cursor: pointer;" onclick="window.location='{{ route('contact.index') }}'">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">

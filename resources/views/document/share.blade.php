@@ -1,3 +1,8 @@
+@php
+    $document_type_title = ucwords(str_replace('_', ' ', $document_type ?? 'document'));
+    $document_type_route = str_replace('_', '-', $document_type ?? 'document');
+@endphp
+
 @extends('layouts.app')
 @section('page-title')
     {{__('Document Details')}}
@@ -19,7 +24,7 @@
             <a href="{{route('dashboard')}}">{{__('Dashboard')}}</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{route('document.index')}}">{{__('Document')}}</a>
+            <a href="{{route($document_type_route.'.index')}}">{{__($document_type_title)}}</a>
         </li>
         <li class="breadcrumb-item active">
             <a href="#">{{__('Details')}}</a>
@@ -43,7 +48,7 @@
                                             <div class="col-auto">
                                                 <a class="btn btn-secondary btn-sm ml-20 customModal" href="#"
                                                     data-size="lg"
-                                                    data-url="{{ route('document.add.share', encrypt($document->id)) }}"
+                                                    data-url="{{ route($document_type_route.'.add.share', encrypt($document->id)) }}"
                                                     data-title="{{ __('Share Document') }}"> <i
                                                         class="ti ti-plus mr-5"></i>{{ __('Share Document') }}</a>
                                             </div>
@@ -75,7 +80,7 @@
                                                         <td>{{ !empty($shareDocument->end_date) ? dateFormat($shareDocument->end_date) : '-' }}</td>
                                                         @if (Gate::check('delete share document'))
                                                             <td>
-                                                                {!! Form::open(['method' => 'DELETE', 'route' => ['document.share.destroy', encrypt($shareDocument->id)]]) !!}
+                                                                {!! Form::open(['method' => 'DELETE', 'route' => [$document_type_route.'.share.destroy', encrypt($shareDocument->id)]]) !!}
                                                                 <a class=" avtar avtar-xs btn-link-danger text-danger confirm_dialog"
                                                                     data-bs-toggle="tooltip"
                                                                     data-bs-original-title="{{ __('Detete') }}"
@@ -98,4 +103,3 @@
     </div>
 </div>
 @endsection
-

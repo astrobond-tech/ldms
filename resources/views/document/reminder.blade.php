@@ -1,3 +1,8 @@
+@php
+    $document_type_title = ucwords(str_replace('_', ' ', $document_type ?? 'document'));
+    $document_type_route = str_replace('_', '-', $document_type ?? 'document');
+@endphp
+
 @extends('layouts.app')
 @section('page-title')
     {{__('Document Details')}}
@@ -9,7 +14,7 @@
             <a href="{{route('dashboard')}}">{{__('Dashboard')}}</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{route('document.index')}}">{{__('Document')}}</a>
+            <a href="{{route($document_type_route.'.index')}}">{{__($document_type_title)}}</a>
         </li>
         <li class="breadcrumb-item active">
             <a href="#">{{__('Details')}}</a>
@@ -34,7 +39,7 @@
                                         @if (Gate::check('create reminder'))
                                             <a class="btn btn-secondary btn-sm ml-20 customModal" href="#"
                                                 data-size="lg"
-                                                data-url="{{ route('document.add.reminder', $document->id) }}"
+                                                data-url="{{ route($document_type_route.'.add.reminder', $document->id) }}"
                                                 data-title="{{ __('Create Reminder') }}"> <i
                                                     class="ti ti-plus mr-5"></i>{{ __('Create Reminder') }}</a>
                                         @endif
@@ -121,4 +126,3 @@
     </div>
 </div>
 @endsection
-

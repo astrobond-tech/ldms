@@ -5,8 +5,8 @@
 
     <ul class="nav flex-column nav-tabs account-tabs mb-3" id="myTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link {{ empty($routeName) || $routeName == 'document.show' ? ' active ' : '' }}"
-                href="{{ route('document.show', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
+            <a class="nav-link {{ in_array($routeName, [$document_type_route.'.show', '']) ? ' active ' : '' }}"
+                href="{{ route($document_type_route.'.show', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
                 aria-selected="true">
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0">
@@ -20,8 +20,8 @@
         </li>
         @if (Gate::check('manage comment'))
             <li class="nav-item">
-                <a class="nav-link {{ empty($routeName) || $routeName == 'document.comment' ? ' active ' : '' }}"
-                    href="{{ route('document.comment', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
+                <a class="nav-link {{ $routeName == $document_type_route.'.comment' ? ' active ' : '' }}"
+                    href="{{ route($document_type_route.'.comment', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
                     aria-selected="true">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -36,8 +36,8 @@
         @endif
         @if (Gate::check('manage reminder'))
             <li class="nav-item">
-                <a class="nav-link {{ empty($routeName) || $routeName == 'document.reminder' ? ' active ' : '' }}"
-                    href="{{ route('document.reminder', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
+                <a class="nav-link {{ $routeName == $document_type_route.'.reminder' ? ' active ' : '' }}"
+                    href="{{ route($document_type_route.'.reminder', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
                     aria-selected="true">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -52,8 +52,8 @@
         @endif
         @if (Gate::check('manage version'))
             <li class="nav-item">
-                <a class="nav-link {{ empty($routeName) || $routeName == 'document.version.history' ? ' active ' : '' }}"
-                    href="{{ route('document.version.history', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
+                <a class="nav-link {{ $routeName == $document_type_route.'.version.history' ? ' active ' : '' }}"
+                    href="{{ route($document_type_route.'.version.history', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
                     aria-selected="true">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -68,8 +68,8 @@
         @endif
         @if (Gate::check('manage share document'))
             <li class="nav-item">
-                <a class="nav-link {{ empty($routeName) || $routeName == 'document.share' ? ' active ' : '' }}"
-                    href="{{ route('document.share', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
+                <a class="nav-link {{ $routeName == $document_type_route.'.share' ? ' active ' : '' }}"
+                    href="{{ route($document_type_route.'.share', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
                     aria-selected="true">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -84,8 +84,8 @@
         @endif
         @if (Gate::check('manage mail'))
             <li class="nav-item">
-                <a class="nav-link {{ empty($routeName) || $routeName == 'document.send.email' ? ' active ' : '' }}"
-                    href="{{ route('document.send.email', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
+                <a class="nav-link {{ $routeName == $document_type_route.'.send.email' ? ' active ' : '' }}"
+                    href="{{ route($document_type_route.'.send.email', \Illuminate\Support\Facades\Crypt::encrypt($document->id)) }}"
                     aria-selected="true">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">

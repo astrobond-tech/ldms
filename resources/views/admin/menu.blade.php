@@ -198,7 +198,7 @@
                         <li class="pc-item {{ Request::route()->getName() == 'document.history' ? 'active' : '' }}">
                             <a href="{{ route('document.history') }}" class="pc-link">
                                 <span class="pc-micon"><i data-feather="wind"></i></span>
-                                <span class="pc-mtext">{{ __('Document History') }}</span>
+                                <span class="pc-mtext">{{ __('History') }}</span>
                             </a>
                         </li>
                     @endif

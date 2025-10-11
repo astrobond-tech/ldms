@@ -188,29 +188,42 @@ class DocumentController extends Controller
             $data['description'] = __('New document') . ' ' . $document->name . ' ' . __('created by') . ' ' . \Auth::user()->name;
             DocumentHistory::history($data);
 
-            return redirect()->back()->with('success', __('Document successfully created!'));
+            $document_type_name = 'Document';
+            if ($request->document_type == 'book') {
+                $document_type_name = 'Book';
+            } elseif ($request->document_type == 'paper_cutting') {
+                $document_type_name = 'Paper Cutting';
+            }
+
+            return redirect()->back()->with('success', __($document_type_name . ' successfully created!'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
     }
 
 
-    public function show($cid)
+    public function show(Request $request, $cid)
     {
+        $document_type = 'document';
+        if ($request->is('book/*')) {
+            $document_type = 'book';
+        } elseif ($request->is('paper-cutting/*')) {
+            $document_type = 'paper_cutting';
+        }
+
         $id = Crypt::decrypt($cid);
         $document = Document::with('essential')->find($id);
         $latestVersion = VersionHistory::where('document_id', $id)->where('current_version', 1)->first();
-        return view('document.show', compact('document', 'latestVersion'));
+        return view('document.show', compact('document', 'latestVersion', 'document_type'));
     }
 
 
     public function edit(Request $request, $id)
     {
-        $path = $request->path();
         $document_type = 'document';
-        if (str_starts_with($path, 'book')) {
+        if ($request->is('book/*')) {
             $document_type = 'book';
-        } elseif (str_starts_with($path, 'paper-cutting')) {
+        } elseif ($request->is('paper-cutting/*')) {
             $document_type = 'paper_cutting';
         }
 
@@ -240,7 +253,6 @@ class DocumentController extends Controller
                     'sub_category_id' => 'nullable',
                     'stage_id' => 'nullable',
                     'assign_to' => 'nullable',
-                    'document_type' => 'required|in:book,document,paper_cutting',
                     'copies_total' => 'nullable|integer',
                     'copies_available' => 'nullable|integer',
                     'rack' => 'nullable|string',
@@ -267,6 +279,14 @@ class DocumentController extends Controller
                 return redirect()->back()->with('error', $messages->first());
             }
 
+            $routeName = $request->route()->getName();
+            $document_type = 'document';
+            if (str_starts_with($routeName, 'book.')) {
+                $document_type = 'book';
+            } elseif (str_starts_with($routeName, 'paper-cutting.')) {
+                $document_type = 'paper_cutting';
+            }
+
             $id = decrypt($id);
             $document = Document::find($id);
             $document->name = $request->name;
@@ -279,7 +299,6 @@ class DocumentController extends Controller
             $document->save();
 
             $essential = DocumentEssential::firstOrNew(['document_id' => $document->id]);
-            $essential->document_type = $request->document_type;
             $essential->copies_total = $request->copies_total;
             $essential->copies_available = $request->copies_available;
             $essential->rack = $request->rack;
@@ -306,7 +325,14 @@ class DocumentController extends Controller
             $data['description'] = __('Document update') . ' ' . $document->name . ' ' . __('updated by') . ' ' . \Auth::user()->name;
             DocumentHistory::history($data);
 
-            return redirect()->back()->with('success', __('Document successfully created!'));
+            $document_type_name = 'Document';
+            if ($document_type == 'book') {
+                $document_type_name = 'Book';
+            } elseif ($document_type == 'paper_cutting') {
+                $document_type_name = 'Paper Cutting';
+            }
+
+            return redirect()->back()->with('success', __($document_type_name . ' successfully updated!'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
@@ -373,13 +399,20 @@ class DocumentController extends Controller
         }
     }
 
-    public function comment($ids)
+    public function comment(Request $request, $ids)
     {
         if (\Auth::user()->can('manage comment')) {
+            $document_type = 'document';
+            if ($request->is('book/*')) {
+                $document_type = 'book';
+            } elseif ($request->is('paper-cutting/*')) {
+                $document_type = 'paper_cutting';
+            }
+
             $id = Crypt::decrypt($ids);
             $document = Document::find($id);
             $comments = DocumentComment::where('document_id', $id)->OrderBy('id', 'desc')->get();
-            return view('document.comment', compact('document', 'comments'));
+            return view('document.comment', compact('document', 'comments', 'document_type'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
@@ -421,14 +454,21 @@ class DocumentController extends Controller
         }
     }
 
-    public function reminder($ids)
+    public function reminder(Request $request, $ids)
     {
         if (\Auth::user()->can('manage reminder')) {
+            $document_type = 'document';
+            if ($request->is('book/*')) {
+                $document_type = 'book';
+            } elseif ($request->is('paper-cutting/*')) {
+                $document_type = 'paper_cutting';
+            }
+
             $id = Crypt::decrypt($ids);
             $document = Document::find($id);
             $reminders = Reminder::where('document_id', $id)->OrderBy('id', 'desc')->get();
             $users = User::where('parent_id', parentId())->get()->pluck('name', 'id');
-            return view('document.reminder', compact('document', 'reminders', 'users'));
+            return view('document.reminder', compact('document', 'reminders', 'users', 'document_type'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
@@ -446,14 +486,21 @@ class DocumentController extends Controller
         }
     }
 
-    public function versionHistory($ids)
+    public function versionHistory(Request $request, $ids)
     {
         if (\Auth::user()->can('manage version')) {
+            $document_type = 'document';
+            if ($request->is('book/*')) {
+                $document_type = 'book';
+            } elseif ($request->is('paper-cutting/*')) {
+                $document_type = 'paper_cutting';
+            }
+
             $id = Crypt::decrypt($ids);
             $document = Document::find($id);
             $versions = VersionHistory::where('document_id', $id)->OrderBy('id', 'desc')->get();
 
-            return view('document.version_history', compact('document', 'versions'));
+            return view('document.version_history', compact('document', 'versions', 'document_type'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
@@ -504,14 +551,21 @@ class DocumentController extends Controller
         }
     }
 
-    public function shareDocument($ids)
+    public function shareDocument(Request $request, $ids)
     {
         if (\Auth::user()->can('manage share document')) {
+            $document_type = 'document';
+            if ($request->is('book/*')) {
+                $document_type = 'book';
+            } elseif ($request->is('paper-cutting/*')) {
+                $document_type = 'paper_cutting';
+            }
+
             $id = Crypt::decrypt($ids);
             $document = Document::find($id);
             $shareDocuments = shareDocument::where('document_id', $id)->OrderBy('id', 'desc')->get();
             $users = User::where('parent_id', parentId())->get()->pluck('name', 'id');
-            return view('document.share', compact('document', 'shareDocuments', 'users'));
+            return view('document.share', compact('document', 'shareDocuments', 'users', 'document_type'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
@@ -624,13 +678,20 @@ class DocumentController extends Controller
         }
     }
 
-    public function sendEmail($ids)
+    public function sendEmail(Request $request, $ids)
     {
         if (\Auth::user()->can('manage mail')) {
+            $document_type = 'document';
+            if ($request->is('book/*')) {
+                $document_type = 'book';
+            } elseif ($request->is('paper-cutting/*')) {
+                $document_type = 'paper_cutting';
+            }
+
             $id = Crypt::decrypt($ids);
             $document = Document::find($id);
 
-            return view('document.send_email', compact('document'));
+            return view('document.send_email', compact('document', 'document_type'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }
@@ -812,13 +873,21 @@ class DocumentController extends Controller
     public function archive(Request $request, $id)
     {
         if (\Auth::user()->can('archive document')) {
+            $path = $request->path();
+            $document_type_name = 'Document';
+            if (str_contains($path, 'book')) {
+                $document_type_name = 'Book';
+            } elseif (str_contains($path, 'paper-cutting')) {
+                $document_type_name = 'Paper Cutting';
+            }
+
             $id = decrypt($id);
             $document = Document::find($id);
             if (!empty($document)) {
                 $document->update(['archive' => 1]);
-                return redirect()->back()->with('success', __('Document successfully archived!'));
+                return redirect()->back()->with('success', __($document_type_name . ' successfully archived!'));
             } else {
-                return redirect()->back()->with('error', __('Document not found.'));
+                return redirect()->back()->with('error', __($document_type_name . ' not found.'));
             }
         } else {
             return redirect()->back()->with('error', __('Permission Denied.'));
@@ -828,13 +897,21 @@ class DocumentController extends Controller
     public function unarchive(Request $request, $id)
     {
         if (\Auth::user()->can('archive document')) {
+            $path = $request->path();
+            $document_type_name = 'Document';
+            if (str_contains($path, 'book')) {
+                $document_type_name = 'Book';
+            } elseif (str_contains($path, 'paper-cutting')) {
+                $document_type_name = 'Paper Cutting';
+            }
+
             $id = decrypt($id);
             $document = Document::find($id);
             if (!empty($document)) {
                 $document->update(['archive' => 0]);
-                return redirect()->back()->with('success', __('Document successfully unarchived!'));
+                return redirect()->back()->with('success', __($document_type_name . ' successfully unarchived!'));
             } else {
-                return redirect()->back()->with('error', __('Document not found.'));
+                return redirect()->back()->with('error', __($document_type_name . ' not found.'));
             }
         } else {
             return redirect()->back()->with('error', __('Permission Denied.'));
@@ -844,9 +921,23 @@ class DocumentController extends Controller
     public function documentArchive(Request $request)
     {
         if (\Auth::user()->can('archive document')) {
+
+            $path = $request->path();
+            $document_type = 'document';
+            if ($path == 'book-archive') {
+                $document_type = 'book';
+            } elseif ($path == 'paper-cutting-archive') {
+                $document_type = 'paper_cutting';
+            }
+
             $category = Category::where('parent_id', parentId())->get()->pluck('title', 'id')->prepend(__('Select Category'), '');
             $stages = Stage::where('parent_id', parentId())->get()->pluck('title', 'id')->prepend(__('Select Stage'), '');
             $documents_query = Document::where('parent_id', '=', parentId())->where('archive', 1);
+
+            $documents_query->whereHas('essential', function ($q) use ($document_type) {
+                $q->where('document_type', $document_type);
+            });
+
             if (!empty($request->category)) {
                 $documents_query->where('category_id', $request->category);
             }
@@ -858,7 +949,7 @@ class DocumentController extends Controller
             }
             $documents = $documents_query->OrderBy('id', 'desc')->get();
             session()->flashInput($request->input());
-            return view('document.archive', compact('documents', 'category', 'stages'));
+            return view('document.archive', compact('documents', 'category', 'stages', 'document_type'));
         } else {
             return redirect()->back()->with('error', __('Permission Denied!'));
         }

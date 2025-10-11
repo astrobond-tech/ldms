@@ -1,3 +1,8 @@
+@php
+    $document_type_title = ucwords(str_replace('_', ' ', $document_type ?? 'document'));
+    $document_type_route = str_replace('_', '-', $document_type ?? 'document');
+@endphp
+
 @extends('layouts.app')
 @section('page-title')
     {{__('Document Details')}}
@@ -9,7 +14,7 @@
             <a href="{{route('dashboard')}}">{{__('Dashboard')}}</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{route('document.index')}}">{{__('Document')}}</a>
+            <a href="{{route($document_type_route.'.index')}}">{{__($document_type_title)}}</a>
         </li>
         <li class="breadcrumb-item active">
             <a href="#">{{__('Details')}}</a>
@@ -33,7 +38,7 @@
                                 </div>
 
                                 <div class="row">
-                                    {{ Form::open(['route' => ['document.comment', \Illuminate\Support\Facades\Crypt::encrypt($document->id)], 'method' => 'post']) }}
+                                    {{ Form::open(['route' => [$document_type_route.'.comment', \Illuminate\Support\Facades\Crypt::encrypt($document->id)], 'method' => 'post']) }}
                                     <div class="form-group">
                                         {{ Form::textarea('comment', null, ['class' => 'form-control', 'rows' => 3, 'placeholder' => __('Write a comment')]) }}
                                     </div>
@@ -91,4 +96,3 @@
     </div>
 </div>
 @endsection
-

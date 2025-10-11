@@ -1,3 +1,8 @@
+@php
+    $document_type_title = ucwords(str_replace('_', ' ', $document_type ?? 'document'));
+    $document_type_route = str_replace('_', '-', $document_type ?? 'document');
+@endphp
+
 @extends('layouts.app')
 @section('page-title')
     {{__('Document Details')}}
@@ -9,7 +14,7 @@
             <a href="{{route('dashboard')}}">{{__('Dashboard')}}</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{route('document.index')}}">{{__('Document')}}</a>
+            <a href="{{route($document_type_route.'.index')}}">{{__($document_type_title)}}</a>
         </li>
         <li class="breadcrumb-item active">
             <a href="#">{{__('Details')}}</a>
@@ -32,7 +37,7 @@
                                             </div>
 
                                         </div>
-                                        {{ Form::open(['route' => ['document.new.version', \Illuminate\Support\Facades\Crypt::encrypt($document->id)], 'method' => 'post', 'enctype' => 'multipart/form-data']) }}
+                                        {{ Form::open(['route' => [$document_type_route.'.new.version', \Illuminate\Support\Facades\Crypt::encrypt($document->id)], 'method' => 'post', 'enctype' => 'multipart/form-data']) }}
                                         {{ Form::hidden('document_id', $document->id, ['class' => 'form-control']) }}
                                         <div class="row">
                                             <div class="form-group  col-md-12">
@@ -110,4 +115,3 @@
     </div>
 </div>
 @endsection
-
